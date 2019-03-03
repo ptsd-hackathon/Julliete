@@ -4,17 +4,6 @@ const { ApolloServer, gql } = require('apollo-server');
 import fs from "fs";
 import path from "path";
 
-const books = [
-    {
-        title: 'Harry Potter and the Chamber of Secrets',
-        author: 'J.K. Rowling',
-    },
-    {
-        title: 'Jurassic Park',
-        author: 'Michael Crichton',
-    },
-];
-
 const resolvers = {
     Query: {
         user: () => { return {"id":"Asdf", "email":"yarinvak@gmail.com"} },
