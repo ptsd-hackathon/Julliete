@@ -5,8 +5,11 @@ import fs from "fs";
 import path from "path";
 import {scheduleJob} from "node-schedule";
 import {UserRegistration} from "./bl/UserRegistration";
+import {EchoConnector} from "./bl/connectors/EchoConnector";
+import {LocationSender} from "./bl/LocationSender";
 
 const userRegistration = new UserRegistration();
+const locationSender = new LocationSender(new EchoConnector());
 
 const resolvers = {
     Query: {
@@ -17,7 +20,8 @@ const resolvers = {
         }
     },
     Mutation: {
-        sendUserLocation: (root: any, {userId, location}: { userId: string, location: GQLLocationInput }) => {
+        sendUserLocation: (root: any, {email, location}: { email: string, location: GQLLocationInput }) => {
+            locationSender.sendLocation(email, {lat: location.lat, long:location.long});
             return true;
         },
         registerUser: (root: any, {user}: { user: GQLUserInput }) => {
@@ -38,6 +42,6 @@ server.listen().then(({url}: { url: string }) => {
 });
 
 const scheduler = scheduleJob('*/5 * * * * *', function () {
-    console.log('Sending Request');
+    // console.log('Sending Request');
 });
 
