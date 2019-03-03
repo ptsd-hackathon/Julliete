@@ -10,7 +10,7 @@ import {LimaConnector} from "./bl/connectors/LimaConnector";
 import {LocationSender} from "./bl/LocationSender";
 
 const userRegistration = new UserRegistration();
-const locationSender = new LocationSender(new EchoConnector(), new LimaConnector() );
+const locationSender = new LocationSender(new EchoConnector(), new LimaConnector());
 
 const resolvers = {
     Query: {
@@ -18,11 +18,17 @@ const resolvers = {
         users: () => {
             console.log(userRegistration.usersFromDb);
             return userRegistration.usersFromDb;
+        },
+        weatherPreferences: () => {
+            let limaConnector = new LimaConnector();
+            return limaConnector.getWeatherPreferences().then((response: any) => {
+                return response.data;
+            }).catch((err) => {throw new Error(err);});
         }
     },
     Mutation: {
         sendUserLocation: (root: any, {email, location}: { email: string, location: GQLLocationInput }) => {
-            locationSender.sendLocation(email, {lat: location.lat, long:location.long});
+            locationSender.sendLocation(email, {lat: location.lat, long: location.long});
             return true;
         },
         registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {

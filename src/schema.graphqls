@@ -131,6 +131,22 @@ input SleepingHoursInput{
 
 type Query {
     users: [User]
+    weatherPreferences: WeatherPreferences
+}
+
+type WeatherFamily{
+    type: String,
+    title: String
+}
+
+type Range{
+    min: Int,
+    max: Int
+}
+
+type WeatherPreferences{
+    families: [WeatherFamily]
+    range: Range
 }
 
 input LocationInput{
