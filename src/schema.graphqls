@@ -1,18 +1,39 @@
 type User{
+    id: String
+    email: String
+    password: String
+    userInfo: UserInformation
+}
+
+type UserInformation{
     privateName: String
     lastName: String
-    id: String
     gender: Gender
     dateOfBirth: CustomDate
     phoneNumber: String
     initialPanicAttackDate: CustomDate
-    email: String
     sleep: SleepingHours
-    contacts: [Contact]
+    emergencyContacts: [Contact]
     isShabbatKeeper: Boolean
     isSmoking: Boolean
     familyStatus: FamilyStatus
+    traumaType: TraumaType
+    medicalInformation: MedicalInformation
+    address: Address
+    stressHours: [Int]
+    stressfullPlaces: [String]
+}
 
+type Address{
+    state: String
+    city: String
+    street: String
+    apartment: String
+}
+
+type MedicalInformation{
+    isTaking: Boolean
+    drugs: [String]
 }
 
 enum Gender{
@@ -20,10 +41,14 @@ enum Gender{
     FEMALE
 }
 
+enum TraumaType{
+    SEX_ASSAULT
+    ARMY
+}
+
 type FamilyStatus{
     isMarried: Boolean
     numberOfChildren: Int
-    stressHours: [Int]
 }
 
 type Contact{
@@ -43,5 +68,15 @@ type SleepingHours{
 }
 
 type Query {
-    books: [Book]
+    user: User
+
+}
+
+input LocationInput{
+    long: Float
+    lat: Float
+}
+
+type Mutation{
+    sendUserLocation(userId: String, location: LocationInput): Boolean
 }

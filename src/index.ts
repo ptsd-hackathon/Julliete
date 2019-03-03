@@ -15,7 +15,7 @@ const books = [
 
 const resolvers = {
     Query: {
-        books: () => books,
+        user: () => { return {"id":"Asdf", "email":"yarinvak@gmail.com"} },
     },
 };
 
