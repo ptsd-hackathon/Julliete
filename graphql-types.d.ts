@@ -12,31 +12,40 @@ import { GraphQLResolveInfo } from 'graphql';
  *                             *
  *******************************/
 export interface GQLQuery {
-  user?: GQLUser;
+  user?: string;
 }
 
-export interface GQLUser {
-  id?: string;
+export interface GQLMutation {
+  sendUserLocation?: boolean;
+  registerUser?: boolean;
+}
+
+export interface GQLLocationInput {
+  long?: number;
+  lat?: number;
+}
+
+export interface GQLUserInput {
   email?: string;
   password?: string;
-  userInfo?: GQLUserInformation;
+  userInfo?: GQLUserInformationInput;
 }
 
-export interface GQLUserInformation {
+export interface GQLUserInformationInput {
   privateName?: string;
   lastName?: string;
   gender?: GQLGender;
-  dateOfBirth?: GQLCustomDate;
+  dateOfBirth?: GQLCustomDateInput;
   phoneNumber?: string;
-  initialPanicAttackDate?: GQLCustomDate;
-  sleep?: GQLSleepingHours;
-  emergencyContacts?: Array<GQLContact | null>;
+  initialPanicAttackDate?: GQLCustomDateInput;
+  sleep?: GQLSleepingHoursInput;
+  emergencyContacts?: Array<GQLContactInput | null>;
   isShabbatKeeper?: boolean;
   isSmoking?: boolean;
-  familyStatus?: GQLFamilyStatus;
+  familyStatus?: GQLFamilyStatusInput;
   traumaType?: GQLTraumaType;
-  medicalInformation?: GQLMedicalInformation;
-  address?: GQLAddress;
+  medicalInformation?: GQLMedicalInformationInput;
+  address?: GQLAddressInput;
   stressHours?: Array<number | null>;
   stressfullPlaces?: Array<string | null>;
 }
@@ -46,23 +55,23 @@ export enum GQLGender {
   FEMALE = 'FEMALE'
 }
 
-export interface GQLCustomDate {
+export interface GQLCustomDateInput {
   day?: string;
   month?: string;
   year?: string;
 }
 
-export interface GQLSleepingHours {
+export interface GQLSleepingHoursInput {
   bedHour?: number;
   wakingHour?: number;
 }
 
-export interface GQLContact {
+export interface GQLContactInput {
   phoneNumber?: string;
   name?: string;
 }
 
-export interface GQLFamilyStatus {
+export interface GQLFamilyStatusInput {
   isMarried?: boolean;
   numberOfChildren?: number;
 }
@@ -72,25 +81,22 @@ export enum GQLTraumaType {
   ARMY = 'ARMY'
 }
 
-export interface GQLMedicalInformation {
+export interface GQLMedicalInformationInput {
   isTaking?: boolean;
   drugs?: Array<string | null>;
 }
 
-export interface GQLAddress {
+export interface GQLAddressInput {
   state?: string;
   city?: string;
   street?: string;
   apartment?: string;
 }
 
-export interface GQLMutation {
-  sendUserLocation?: boolean;
-}
-
-export interface GQLLocationInput {
-  long?: number;
-  lat?: number;
+export interface GQLUser {
+  id?: string;
+  email?: string;
+  password?: string;
 }
 
 /*********************************
@@ -105,15 +111,8 @@ export interface GQLLocationInput {
  */
 export interface GQLResolver {
   Query?: GQLQueryTypeResolver;
-  User?: GQLUserTypeResolver;
-  UserInformation?: GQLUserInformationTypeResolver;
-  CustomDate?: GQLCustomDateTypeResolver;
-  SleepingHours?: GQLSleepingHoursTypeResolver;
-  Contact?: GQLContactTypeResolver;
-  FamilyStatus?: GQLFamilyStatusTypeResolver;
-  MedicalInformation?: GQLMedicalInformationTypeResolver;
-  Address?: GQLAddressTypeResolver;
   Mutation?: GQLMutationTypeResolver;
+  User?: GQLUserTypeResolver;
 }
 export interface GQLQueryTypeResolver<TParent = any> {
   user?: QueryToUserResolver<TParent>;
@@ -123,11 +122,30 @@ export interface QueryToUserResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface GQLMutationTypeResolver<TParent = any> {
+  sendUserLocation?: MutationToSendUserLocationResolver<TParent>;
+  registerUser?: MutationToRegisterUserResolver<TParent>;
+}
+
+export interface MutationToSendUserLocationArgs {
+  userId?: string;
+  location?: GQLLocationInput;
+}
+export interface MutationToSendUserLocationResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: MutationToSendUserLocationArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MutationToRegisterUserArgs {
+  user?: GQLUserInput;
+}
+export interface MutationToRegisterUserResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: MutationToRegisterUserArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface GQLUserTypeResolver<TParent = any> {
   id?: UserToIdResolver<TParent>;
   email?: UserToEmailResolver<TParent>;
   password?: UserToPasswordResolver<TParent>;
-  userInfo?: UserToUserInfoResolver<TParent>;
 }
 
 export interface UserToIdResolver<TParent = any, TResult = any> {
@@ -140,196 +158,4 @@ export interface UserToEmailResolver<TParent = any, TResult = any> {
 
 export interface UserToPasswordResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserToUserInfoResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLUserInformationTypeResolver<TParent = any> {
-  privateName?: UserInformationToPrivateNameResolver<TParent>;
-  lastName?: UserInformationToLastNameResolver<TParent>;
-  gender?: UserInformationToGenderResolver<TParent>;
-  dateOfBirth?: UserInformationToDateOfBirthResolver<TParent>;
-  phoneNumber?: UserInformationToPhoneNumberResolver<TParent>;
-  initialPanicAttackDate?: UserInformationToInitialPanicAttackDateResolver<TParent>;
-  sleep?: UserInformationToSleepResolver<TParent>;
-  emergencyContacts?: UserInformationToEmergencyContactsResolver<TParent>;
-  isShabbatKeeper?: UserInformationToIsShabbatKeeperResolver<TParent>;
-  isSmoking?: UserInformationToIsSmokingResolver<TParent>;
-  familyStatus?: UserInformationToFamilyStatusResolver<TParent>;
-  traumaType?: UserInformationToTraumaTypeResolver<TParent>;
-  medicalInformation?: UserInformationToMedicalInformationResolver<TParent>;
-  address?: UserInformationToAddressResolver<TParent>;
-  stressHours?: UserInformationToStressHoursResolver<TParent>;
-  stressfullPlaces?: UserInformationToStressfullPlacesResolver<TParent>;
-}
-
-export interface UserInformationToPrivateNameResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToLastNameResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToGenderResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToDateOfBirthResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToPhoneNumberResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToInitialPanicAttackDateResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToSleepResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToEmergencyContactsResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToIsShabbatKeeperResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToIsSmokingResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToFamilyStatusResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToTraumaTypeResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToMedicalInformationResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToAddressResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToStressHoursResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UserInformationToStressfullPlacesResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLCustomDateTypeResolver<TParent = any> {
-  day?: CustomDateToDayResolver<TParent>;
-  month?: CustomDateToMonthResolver<TParent>;
-  year?: CustomDateToYearResolver<TParent>;
-}
-
-export interface CustomDateToDayResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface CustomDateToMonthResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface CustomDateToYearResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLSleepingHoursTypeResolver<TParent = any> {
-  bedHour?: SleepingHoursToBedHourResolver<TParent>;
-  wakingHour?: SleepingHoursToWakingHourResolver<TParent>;
-}
-
-export interface SleepingHoursToBedHourResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface SleepingHoursToWakingHourResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLContactTypeResolver<TParent = any> {
-  phoneNumber?: ContactToPhoneNumberResolver<TParent>;
-  name?: ContactToNameResolver<TParent>;
-}
-
-export interface ContactToPhoneNumberResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface ContactToNameResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLFamilyStatusTypeResolver<TParent = any> {
-  isMarried?: FamilyStatusToIsMarriedResolver<TParent>;
-  numberOfChildren?: FamilyStatusToNumberOfChildrenResolver<TParent>;
-}
-
-export interface FamilyStatusToIsMarriedResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface FamilyStatusToNumberOfChildrenResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLMedicalInformationTypeResolver<TParent = any> {
-  isTaking?: MedicalInformationToIsTakingResolver<TParent>;
-  drugs?: MedicalInformationToDrugsResolver<TParent>;
-}
-
-export interface MedicalInformationToIsTakingResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface MedicalInformationToDrugsResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLAddressTypeResolver<TParent = any> {
-  state?: AddressToStateResolver<TParent>;
-  city?: AddressToCityResolver<TParent>;
-  street?: AddressToStreetResolver<TParent>;
-  apartment?: AddressToApartmentResolver<TParent>;
-}
-
-export interface AddressToStateResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface AddressToCityResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface AddressToStreetResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface AddressToApartmentResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLMutationTypeResolver<TParent = any> {
-  sendUserLocation?: MutationToSendUserLocationResolver<TParent>;
-}
-
-export interface MutationToSendUserLocationArgs {
-  userId?: string;
-  location?: GQLLocationInput;
-}
-export interface MutationToSendUserLocationResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: MutationToSendUserLocationArgs, context: any, info: GraphQLResolveInfo): TResult;
 }

@@ -2,36 +2,61 @@ type User{
     id: String
     email: String
     password: String
-    userInfo: UserInformation
+#    userInfo: UserInformation
 }
 
-type UserInformation{
+input UserInput{
+    email: String
+    password: String
+    userInfo: UserInformationInput
+}
+
+input UserInformationInput{
     privateName: String
     lastName: String
     gender: Gender
-    dateOfBirth: CustomDate
+    dateOfBirth: CustomDateInput
     phoneNumber: String
-    initialPanicAttackDate: CustomDate
-    sleep: SleepingHours
-    emergencyContacts: [Contact]
+    initialPanicAttackDate: CustomDateInput
+    sleep: SleepingHoursInput
+    emergencyContacts: [ContactInput]
     isShabbatKeeper: Boolean
     isSmoking: Boolean
-    familyStatus: FamilyStatus
+    familyStatus: FamilyStatusInput
     traumaType: TraumaType
-    medicalInformation: MedicalInformation
-    address: Address
+    medicalInformation: MedicalInformationInput
+    address: AddressInput
     stressHours: [Int]
     stressfullPlaces: [String]
 }
 
-type Address{
+#type UserInformation{
+#    privateName: String
+#    lastName: String
+#    gender: Gender
+#    dateOfBirth: CustomDate
+#    phoneNumber: String
+#    initialPanicAttackDate: CustomDate
+#    sleep: SleepingHours
+#    emergencyContacts: [Contact]
+#    isShabbatKeeper: Boolean
+#    isSmoking: Boolean
+#    familyStatus: FamilyStatus
+#    traumaType: TraumaType
+#    medicalInformation: MedicalInformation
+#    address: Address
+#    stressHours: [Int]
+#    stressfullPlaces: [String]
+#}
+
+input AddressInput{
     state: String
     city: String
     street: String
     apartment: String
 }
 
-type MedicalInformation{
+input MedicalInformationInput{
     isTaking: Boolean
     drugs: [String]
 }
@@ -46,29 +71,29 @@ enum TraumaType{
     ARMY
 }
 
-type FamilyStatus{
+input FamilyStatusInput{
     isMarried: Boolean
     numberOfChildren: Int
 }
 
-type Contact{
+input ContactInput{
     phoneNumber: String
     name: String
 }
 
-type CustomDate{
+input CustomDateInput{
     day: String
     month: String
     year: String
 }
 
-type SleepingHours{
+input SleepingHoursInput{
     bedHour: Int
     wakingHour: Int
 }
 
 type Query {
-    user: User
+    user: String
 
 }
 
@@ -79,4 +104,5 @@ input LocationInput{
 
 type Mutation{
     sendUserLocation(userId: String, location: LocationInput): Boolean
+    registerUser(user: UserInput): Boolean
 }

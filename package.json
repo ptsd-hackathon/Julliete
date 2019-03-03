@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "gen": "ts-node schema-generator.ts",
-    "build": "ts-node src/index.ts",
+    "build": "npm run gen",
     "start": "npm run build & ts-node src/index.ts"
   },
   "repository": {
