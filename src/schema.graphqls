@@ -49,25 +49,6 @@ input UserInformationInput{
     stressfullPlaces: [String]
 }
 
-#type UserInformation{
-#    privateName: String
-#    lastName: String
-#    gender: Gender
-#    dateOfBirth: CustomDate
-#    phoneNumber: String
-#    initialPanicAttackDate: CustomDate
-#    sleep: SleepingHours
-#    emergencyContacts: [Contact]
-#    isShabbatKeeper: Boolean
-#    isSmoking: Boolean
-#    familyStatus: FamilyStatus
-#    traumaType: TraumaType
-#    medicalInformation: MedicalInformation
-#    address: Address
-#    stressHours: [Int]
-#    stressfullPlaces: [String]
-#}
-
 input AddressInput{
     state: String
     city: String
