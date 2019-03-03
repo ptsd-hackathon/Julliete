@@ -17,10 +17,15 @@ const userInformationSender = new UserInformationSender(new WhiskeyConnector());
 
 const resolvers = {
     Query: {
-        // user: () => { return {"id":"Asdf", "email":"yarinvak@gmail.com"} },
         users: () => {
             console.log(usersService.users);
             return usersService.users;
+        },
+        weatherPreferences: () => {
+            let limaConnector = new LimaConnector();
+            return limaConnector.getWeatherPreferences().then((response: any) => {
+                return response.data;
+            }).catch((err) => {throw new Error(err);});
         }
     },
     Mutation: {
