@@ -1,6 +1,4 @@
 import {GQLUserInput} from "../../graphql-types";
-import {response} from "express";
-import axios, { AxiosRequestConfig, AxiosPromise } from 'axios';
 
 export class UserRegistration {
     // @ts-ignore
