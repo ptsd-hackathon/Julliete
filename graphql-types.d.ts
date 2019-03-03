@@ -86,6 +86,7 @@ export interface GQLAddress {
 export interface GQLMutation {
   sendUserLocation?: boolean;
   registerUser?: boolean;
+  login?: boolean;
 }
 
 export interface GQLLocationInput {
@@ -378,6 +379,7 @@ export interface AddressToApartmentResolver<TParent = any, TResult = any> {
 export interface GQLMutationTypeResolver<TParent = any> {
   sendUserLocation?: MutationToSendUserLocationResolver<TParent>;
   registerUser?: MutationToRegisterUserResolver<TParent>;
+  login?: MutationToLoginResolver<TParent>;
 }
 
 export interface MutationToSendUserLocationArgs {
@@ -393,4 +395,12 @@ export interface MutationToRegisterUserArgs {
 }
 export interface MutationToRegisterUserResolver<TParent = any, TResult = any> {
   (parent: TParent, args: MutationToRegisterUserArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MutationToLoginArgs {
+  email?: string;
+  password?: string;
+}
+export interface MutationToLoginResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: MutationToLoginArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
