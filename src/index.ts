@@ -6,10 +6,11 @@ import path from "path";
 import {scheduleJob} from "node-schedule";
 import {UserRegistration} from "./bl/UserRegistration";
 import {EchoConnector} from "./bl/connectors/EchoConnector";
+import {LimaConnector} from "./bl/connectors/LimaConnector";
 import {LocationSender} from "./bl/LocationSender";
 
 const userRegistration = new UserRegistration();
-const locationSender = new LocationSender(new EchoConnector());
+const locationSender = new LocationSender(new EchoConnector(), new LimaConnector() );
 
 const resolvers = {
     Query: {
