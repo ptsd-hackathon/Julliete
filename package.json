@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "gen": "ts-node schema-generator.ts",
     "build": "npm run gen",
-    "start": "npm run build & ts-node src/index.ts"
+    "serve": "ts-node src/index.ts",
+    "start": "npm run build & npm run serve"
   },
   "repository": {
     "type": "git",

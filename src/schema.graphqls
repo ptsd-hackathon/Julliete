@@ -2,7 +2,6 @@ type User{
     id: String
     email: String
     userInfo: UserInformation
-
 }
 
 input UserInput{
@@ -130,7 +129,7 @@ input SleepingHoursInput{
 }
 
 type Query {
-    user: String
+    users: [User]
 }
 
 input LocationInput{
@@ -141,4 +140,5 @@ input LocationInput{
 type Mutation{
     sendUserLocation(userId: String, location: LocationInput): Boolean
     registerUser(user: UserInput): Boolean
+    login(email: String, password: String): Boolean
 }

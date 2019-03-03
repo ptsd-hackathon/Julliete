@@ -12,7 +12,75 @@ import { GraphQLResolveInfo } from 'graphql';
  *                             *
  *******************************/
 export interface GQLQuery {
-  user?: string;
+  users?: Array<GQLUser | null>;
+}
+
+export interface GQLUser {
+  id?: string;
+  email?: string;
+  userInfo?: GQLUserInformation;
+}
+
+export interface GQLUserInformation {
+  privateName?: string;
+  lastName?: string;
+  gender?: GQLGender;
+  dateOfBirth?: GQLCustomDate;
+  phoneNumber?: string;
+  initialPanicAttackDate?: GQLCustomDate;
+  sleep?: GQLSleepingHours;
+  emergencyContacts?: Array<GQLContact | null>;
+  isShabbatKeeper?: boolean;
+  isSmoking?: boolean;
+  familyStatus?: GQLFamilyStatus;
+  traumaType?: GQLTraumaType;
+  medicalInformation?: GQLMedicalInformation;
+  address?: GQLAddress;
+  stressHours?: Array<number | null>;
+  stressfullPlaces?: Array<string | null>;
+}
+
+export enum GQLGender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE'
+}
+
+export interface GQLCustomDate {
+  day?: string;
+  month?: string;
+  year?: string;
+}
+
+export interface GQLSleepingHours {
+  bedHour?: number;
+  wakingHour?: number;
+}
+
+export interface GQLContact {
+  phoneNumber?: string;
+  name?: string;
+}
+
+export interface GQLFamilyStatus {
+  isMarried?: boolean;
+  numberOfChildren?: number;
+}
+
+export enum GQLTraumaType {
+  SEX_ASSAULT = 'SEX_ASSAULT',
+  ARMY = 'ARMY'
+}
+
+export interface GQLMedicalInformation {
+  isTaking?: boolean;
+  drugs?: Array<string | null>;
+}
+
+export interface GQLAddress {
+  state?: string;
+  city?: string;
+  street?: string;
+  apartment?: string;
 }
 
 export interface GQLMutation {
@@ -50,11 +118,6 @@ export interface GQLUserInformationInput {
   stressfullPlaces?: Array<string | null>;
 }
 
-export enum GQLGender {
-  MALE = 'MALE',
-  FEMALE = 'FEMALE'
-}
-
 export interface GQLCustomDateInput {
   day?: string;
   month?: string;
@@ -76,75 +139,12 @@ export interface GQLFamilyStatusInput {
   numberOfChildren?: number;
 }
 
-export enum GQLTraumaType {
-  SEX_ASSAULT = 'SEX_ASSAULT',
-  ARMY = 'ARMY'
-}
-
 export interface GQLMedicalInformationInput {
   isTaking?: boolean;
   drugs?: Array<string | null>;
 }
 
 export interface GQLAddressInput {
-  state?: string;
-  city?: string;
-  street?: string;
-  apartment?: string;
-}
-
-export interface GQLUser {
-  id?: string;
-  email?: string;
-  userInfo?: GQLUserInformation;
-}
-
-export interface GQLUserInformation {
-  privateName?: string;
-  lastName?: string;
-  gender?: GQLGender;
-  dateOfBirth?: GQLCustomDate;
-  phoneNumber?: string;
-  initialPanicAttackDate?: GQLCustomDate;
-  sleep?: GQLSleepingHours;
-  emergencyContacts?: Array<GQLContact | null>;
-  isShabbatKeeper?: boolean;
-  isSmoking?: boolean;
-  familyStatus?: GQLFamilyStatus;
-  traumaType?: GQLTraumaType;
-  medicalInformation?: GQLMedicalInformation;
-  address?: GQLAddress;
-  stressHours?: Array<number | null>;
-  stressfullPlaces?: Array<string | null>;
-}
-
-export interface GQLCustomDate {
-  day?: string;
-  month?: string;
-  year?: string;
-}
-
-export interface GQLSleepingHours {
-  bedHour?: number;
-  wakingHour?: number;
-}
-
-export interface GQLContact {
-  phoneNumber?: string;
-  name?: string;
-}
-
-export interface GQLFamilyStatus {
-  isMarried?: boolean;
-  numberOfChildren?: number;
-}
-
-export interface GQLMedicalInformation {
-  isTaking?: boolean;
-  drugs?: Array<string | null>;
-}
-
-export interface GQLAddress {
   state?: string;
   city?: string;
   street?: string;
@@ -163,7 +163,6 @@ export interface GQLAddress {
  */
 export interface GQLResolver {
   Query?: GQLQueryTypeResolver;
-  Mutation?: GQLMutationTypeResolver;
   User?: GQLUserTypeResolver;
   UserInformation?: GQLUserInformationTypeResolver;
   CustomDate?: GQLCustomDateTypeResolver;
@@ -172,33 +171,14 @@ export interface GQLResolver {
   FamilyStatus?: GQLFamilyStatusTypeResolver;
   MedicalInformation?: GQLMedicalInformationTypeResolver;
   Address?: GQLAddressTypeResolver;
+  Mutation?: GQLMutationTypeResolver;
 }
 export interface GQLQueryTypeResolver<TParent = any> {
-  user?: QueryToUserResolver<TParent>;
+  users?: QueryToUsersResolver<TParent>;
 }
 
-export interface QueryToUserResolver<TParent = any, TResult = any> {
+export interface QueryToUsersResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLMutationTypeResolver<TParent = any> {
-  sendUserLocation?: MutationToSendUserLocationResolver<TParent>;
-  registerUser?: MutationToRegisterUserResolver<TParent>;
-}
-
-export interface MutationToSendUserLocationArgs {
-  userId?: string;
-  location?: GQLLocationInput;
-}
-export interface MutationToSendUserLocationResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: MutationToSendUserLocationArgs, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface MutationToRegisterUserArgs {
-  user?: GQLUserInput;
-}
-export interface MutationToRegisterUserResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: MutationToRegisterUserArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface GQLUserTypeResolver<TParent = any> {
@@ -393,4 +373,24 @@ export interface AddressToStreetResolver<TParent = any, TResult = any> {
 
 export interface AddressToApartmentResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLMutationTypeResolver<TParent = any> {
+  sendUserLocation?: MutationToSendUserLocationResolver<TParent>;
+  registerUser?: MutationToRegisterUserResolver<TParent>;
+}
+
+export interface MutationToSendUserLocationArgs {
+  userId?: string;
+  location?: GQLLocationInput;
+}
+export interface MutationToSendUserLocationResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: MutationToSendUserLocationArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MutationToRegisterUserArgs {
+  user?: GQLUserInput;
+}
+export interface MutationToRegisterUserResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: MutationToRegisterUserArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
