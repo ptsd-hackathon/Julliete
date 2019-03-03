@@ -1,5 +1,4 @@
 import {EchoConnector} from "./connectors/EchoConnector";
-import {GQLLocationInput} from "../../graphql-types";
 import {LimaConnector} from "./connectors/LimaConnector";
 
 export class LocationSender{
