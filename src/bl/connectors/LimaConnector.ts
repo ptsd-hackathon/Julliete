@@ -7,7 +7,7 @@ export class LimaConnector {
         axios.get(this.url + '/crowdedPlaces?lat="' + coords.lat + '"&lng="' + coords.long + '"&triggeringPlacesTypes=' + 'school,' + 'zoo').then((response: any) => {
             console.log("success calling Lima - Crowded Places");
             console.log(response.data);
-        }).catch((err) => console.log(err.response));
+        }).catch((err) => {throw new Error(err)});
     }
 
     getWeatherPreferences() {
