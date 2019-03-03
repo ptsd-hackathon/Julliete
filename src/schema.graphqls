@@ -131,7 +131,6 @@ input SleepingHoursInput{
 
 type Query {
     user: String
-
 }
 
 input LocationInput{

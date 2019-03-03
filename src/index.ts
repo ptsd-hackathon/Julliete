@@ -1,5 +1,4 @@
 import {GQLLocationInput, GQLUserInput} from "../graphql-types";
-
 const { ApolloServer, gql } = require('apollo-server');
 import fs from "fs";
 import path from "path";
