@@ -1,7 +1,47 @@
-type Book {
-    title: String
-    author: String
+type User{
+    privateName: String
+    lastName: String
+    id: String
+    gender: Gender
+    dateOfBirth: CustomDate
+    phoneNumber: String
+    initialPanicAttackDate: CustomDate
+    email: String
+    sleep: SleepingHours
+    contacts: [Contact]
+    isShabbatKeeper: Boolean
+    isSmoking: Boolean
+    familyStatus: FamilyStatus
+
 }
+
+enum Gender{
+    MALE,
+    FEMALE
+}
+
+type FamilyStatus{
+    isMarried: Boolean
+    numberOfChildren: Int
+    stressHours: [Int]
+}
+
+type Contact{
+    phoneNumber: String
+    name: String
+}
+
+type CustomDate{
+    day: String
+    month: String
+    year: String
+}
+
+type SleepingHours{
+    bedHour: Int
+    wakingHour: Int
+}
+
 type Query {
     books: [Book]
 }
