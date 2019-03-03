@@ -1,4 +1,4 @@
-import {GQLLocationInput, GQLUserInput} from "../graphql-types";
+import {GQLLocationInput, GQLUserRegistrationInput} from "../graphql-types";
 
 const {ApolloServer, gql} = require('apollo-server');
 import fs from "fs";
@@ -25,7 +25,7 @@ const resolvers = {
             locationSender.sendLocation(email, {lat: location.lat, long:location.long});
             return true;
         },
-        registerUser: (root: any, {user}: { user: GQLUserInput }) => {
+        registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
             return userRegistration.registerUser(user);
         },
         login: (root: any, {email, password}: { email: string, password: string }) => {

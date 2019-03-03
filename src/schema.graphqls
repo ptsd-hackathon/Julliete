@@ -4,10 +4,11 @@ type User{
     userInfo: UserInformation
 }
 
-input UserInput{
+input UserRegistrationInput{
     email: String
     password: String
-    userInfo: UserInformationInput
+    privateName: String
+    lastName: String
 }
 
 type UserInformation{
@@ -138,7 +139,8 @@ input LocationInput{
 }
 
 type Mutation{
-    sendUserLocation(userId: String, location: LocationInput): Boolean
-    registerUser(user: UserInput): Boolean
+    sendUserLocation(email: String, location: LocationInput): Boolean
+    registerUser(user: UserRegistrationInput): Boolean
+    setUserSettings(userInfo: UserInformationInput): Boolean
     login(email: String, password: String): Boolean
 }

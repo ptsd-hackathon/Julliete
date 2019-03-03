@@ -86,6 +86,7 @@ export interface GQLAddress {
 export interface GQLMutation {
   sendUserLocation?: boolean;
   registerUser?: boolean;
+  setUserSettings?: boolean;
   login?: boolean;
 }
 
@@ -94,10 +95,11 @@ export interface GQLLocationInput {
   long: number;
 }
 
-export interface GQLUserInput {
+export interface GQLUserRegistrationInput {
   email?: string;
   password?: string;
-  userInfo?: GQLUserInformationInput;
+  privateName?: string;
+  lastName?: string;
 }
 
 export interface GQLUserInformationInput {
@@ -379,11 +381,12 @@ export interface AddressToApartmentResolver<TParent = any, TResult = any> {
 export interface GQLMutationTypeResolver<TParent = any> {
   sendUserLocation?: MutationToSendUserLocationResolver<TParent>;
   registerUser?: MutationToRegisterUserResolver<TParent>;
+  setUserSettings?: MutationToSetUserSettingsResolver<TParent>;
   login?: MutationToLoginResolver<TParent>;
 }
 
 export interface MutationToSendUserLocationArgs {
-  userId?: string;
+  email?: string;
   location?: GQLLocationInput;
 }
 export interface MutationToSendUserLocationResolver<TParent = any, TResult = any> {
@@ -391,10 +394,17 @@ export interface MutationToSendUserLocationResolver<TParent = any, TResult = any
 }
 
 export interface MutationToRegisterUserArgs {
-  user?: GQLUserInput;
+  user?: GQLUserRegistrationInput;
 }
 export interface MutationToRegisterUserResolver<TParent = any, TResult = any> {
   (parent: TParent, args: MutationToRegisterUserArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MutationToSetUserSettingsArgs {
+  userInfo?: GQLUserInformationInput;
+}
+export interface MutationToSetUserSettingsResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: MutationToSetUserSettingsArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface MutationToLoginArgs {
