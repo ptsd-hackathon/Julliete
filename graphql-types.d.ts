@@ -90,8 +90,8 @@ export interface GQLMutation {
 }
 
 export interface GQLLocationInput {
-  long?: number;
-  lat?: number;
+  lat: number;
+  long: number;
 }
 
 export interface GQLUserInput {

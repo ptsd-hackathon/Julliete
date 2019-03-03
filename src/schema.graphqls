@@ -133,8 +133,8 @@ type Query {
 }
 
 input LocationInput{
-    long: Float
-    lat: Float
+    lat: Float!
+    long: Float!
 }
 
 type Mutation{
