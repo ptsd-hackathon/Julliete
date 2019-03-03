@@ -1,8 +1,14 @@
 type User{
     id: String
     email: String
-    password: String
     userInfo: UserInformation
+
+}
+
+input UserInput{
+    email: String
+    password: String
+    userInfo: UserInformationInput
 }
 
 type UserInformation{
@@ -24,11 +30,42 @@ type UserInformation{
     stressfullPlaces: [String]
 }
 
+input UserInformationInput{
+    privateName: String
+    lastName: String
+    gender: Gender
+    dateOfBirth: CustomDateInput
+    phoneNumber: String
+    initialPanicAttackDate: CustomDateInput
+    sleep: SleepingHoursInput
+    emergencyContacts: [ContactInput]
+    isShabbatKeeper: Boolean
+    isSmoking: Boolean
+    familyStatus: FamilyStatusInput
+    traumaType: TraumaType
+    medicalInformation: MedicalInformationInput
+    address: AddressInput
+    stressHours: [Int]
+    stressfullPlaces: [String]
+}
+
+input AddressInput{
+    state: String
+    city: String
+    street: String
+    apartment: String
+}
+
 type Address{
     state: String
     city: String
     street: String
     apartment: String
+}
+
+input MedicalInformationInput{
+    isTaking: Boolean
+    drugs: [String]
 }
 
 type MedicalInformation{
@@ -46,15 +83,28 @@ enum TraumaType{
     ARMY
 }
 
+input FamilyStatusInput{
+    isMarried: Boolean
+    numberOfChildren: Int
+}
+
+
 type FamilyStatus{
     isMarried: Boolean
     numberOfChildren: Int
 }
 
+
 type Contact{
     phoneNumber: String
     name: String
 }
+
+input ContactInput{
+    phoneNumber: String
+    name: String
+}
+
 
 type CustomDate{
     day: String
@@ -62,13 +112,25 @@ type CustomDate{
     year: String
 }
 
+input CustomDateInput{
+    day: String
+    month: String
+    year: String
+}
+
+
 type SleepingHours{
     bedHour: Int
     wakingHour: Int
 }
 
+input SleepingHoursInput{
+    bedHour: Int
+    wakingHour: Int
+}
+
 type Query {
-    user: User
+    user: String
 
 }
 
@@ -79,4 +141,5 @@ input LocationInput{
 
 type Mutation{
     sendUserLocation(userId: String, location: LocationInput): Boolean
+    registerUser(user: UserInput): Boolean
 }
