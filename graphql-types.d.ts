@@ -13,6 +13,7 @@ import { GraphQLResolveInfo } from 'graphql';
  *******************************/
 export interface GQLQuery {
   users?: Array<GQLUser | null>;
+  weatherPreferences?: GQLWeatherPreferences;
 }
 
 export interface GQLUser {
@@ -81,6 +82,21 @@ export interface GQLAddress {
   city?: string;
   street?: string;
   apartment?: string;
+}
+
+export interface GQLWeatherPreferences {
+  families?: Array<GQLWeatherFamily | null>;
+  range?: GQLRange;
+}
+
+export interface GQLWeatherFamily {
+  type?: string;
+  title?: string;
+}
+
+export interface GQLRange {
+  min?: number;
+  max?: number;
 }
 
 export interface GQLMutation {
@@ -174,13 +190,21 @@ export interface GQLResolver {
   FamilyStatus?: GQLFamilyStatusTypeResolver;
   MedicalInformation?: GQLMedicalInformationTypeResolver;
   Address?: GQLAddressTypeResolver;
+  WeatherPreferences?: GQLWeatherPreferencesTypeResolver;
+  WeatherFamily?: GQLWeatherFamilyTypeResolver;
+  Range?: GQLRangeTypeResolver;
   Mutation?: GQLMutationTypeResolver;
 }
 export interface GQLQueryTypeResolver<TParent = any> {
   users?: QueryToUsersResolver<TParent>;
+  weatherPreferences?: QueryToWeatherPreferencesResolver<TParent>;
 }
 
 export interface QueryToUsersResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface QueryToWeatherPreferencesResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -375,6 +399,45 @@ export interface AddressToStreetResolver<TParent = any, TResult = any> {
 }
 
 export interface AddressToApartmentResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLWeatherPreferencesTypeResolver<TParent = any> {
+  families?: WeatherPreferencesToFamiliesResolver<TParent>;
+  range?: WeatherPreferencesToRangeResolver<TParent>;
+}
+
+export interface WeatherPreferencesToFamiliesResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface WeatherPreferencesToRangeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLWeatherFamilyTypeResolver<TParent = any> {
+  type?: WeatherFamilyToTypeResolver<TParent>;
+  title?: WeatherFamilyToTitleResolver<TParent>;
+}
+
+export interface WeatherFamilyToTypeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface WeatherFamilyToTitleResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLRangeTypeResolver<TParent = any> {
+  min?: RangeToMinResolver<TParent>;
+  max?: RangeToMaxResolver<TParent>;
+}
+
+export interface RangeToMinResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface RangeToMaxResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
