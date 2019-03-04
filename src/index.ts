@@ -1,6 +1,6 @@
 import {GQLLocationInput, GQLUserRegistrationInput} from "../graphql-types";
 
-const {ApolloServer, gql} = require('apollo-server');
+const {ApolloServer} = require('apollo-server');
 import fs from "fs";
 import path from "path";
 import {scheduleJob} from "node-schedule";
@@ -10,6 +10,8 @@ import {LimaConnector} from "./bl/connectors/LimaConnector";
 import {LocationSender} from "./bl/LocationSender";
 import {UserInformationSender} from "./bl/UserInformationSender";
 import {WhiskeyConnector} from "./bl/connectors/WhiskeyConnector";
+import {UserDAL} from "./DAL/repositories/UserDAL";
+
 import {OnesignalConnector} from "./bl/connectors/OnesignalConnector";
 
 const usersService = new UsersService();
