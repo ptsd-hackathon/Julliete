@@ -40,13 +40,20 @@ const resolvers = {
         }
     },
     Mutation: {
-        sendUserLocation: (root: any, {email, location, userOneSignalId}: { email: string, location: GQLLocationInput,
-            userOneSignalId: string }) => {
-            locationSender.sendLocation(email, {lat: location.lat, long: location.long});
-            let userByEmail = usersService.getUserByEmail(email);
-            userInformationSender.sendUserInformation(userByEmail);
-            let onesignalConnector = new OnesignalConnector();
-            onesignalConnector.send("OSHER HAMELECH!!!!!!!!!!!!!", userOneSignalId)
+        sendUserLocation: (root: any, {email, location, userOneSignalId}: {
+            email: string, location: GQLLocationInput,
+            userOneSignalId: string
+        }) => {
+            usersService.getUserByEmail(email).then(userByEmail => {
+                if (!userByEmail) {
+                    throw new Error("user does not exist");
+                }
+                console.log(userByEmail);
+                locationSender.sendLocation(email, {lat: location.lat, long: location.long}, userByEmail);
+                userInformationSender.sendUserInformation(userByEmail);
+                let onesignalConnector = new OnesignalConnector();
+                onesignalConnector.send("OSHER HAMELECH!!!!!!!!!!!!!", userOneSignalId)
+            });
             return true;
         },
         registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
