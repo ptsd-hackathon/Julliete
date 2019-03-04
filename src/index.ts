@@ -14,7 +14,7 @@ import {UserDAL} from "./DAL/repositories/UserDAL";
 
 import {OnesignalConnector} from "./bl/connectors/OnesignalConnector";
 
-const usersService = new UsersService();
+const usersService = new UsersService(new UserDAL());
 const locationSender = new LocationSender(new EchoConnector(), new LimaConnector());
 const userInformationSender = new UserInformationSender(new WhiskeyConnector());
 

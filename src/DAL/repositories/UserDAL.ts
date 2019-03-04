@@ -12,6 +12,10 @@ export class UserDAL {
         return this.connection.findByEmail(email);
     }
 
+    public getUserByEmailAndPassword(email: any, password: any) {
+        return this.connection.getUserByEmailAndPassword(email, password);
+    }
+
     public getAllUsers() {
         return this.connection.getAllUsers();
     }
