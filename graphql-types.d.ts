@@ -110,6 +110,7 @@ export interface GQLMutation {
   registerUser?: boolean;
   setUserSettings?: boolean;
   login?: boolean;
+  triggerUsers?: boolean;
 }
 
 export interface GQLLocationInput {
@@ -471,6 +472,7 @@ export interface GQLMutationTypeResolver<TParent = any> {
   registerUser?: MutationToRegisterUserResolver<TParent>;
   setUserSettings?: MutationToSetUserSettingsResolver<TParent>;
   login?: MutationToLoginResolver<TParent>;
+  triggerUsers?: MutationToTriggerUsersResolver<TParent>;
 }
 
 export interface MutationToSendUserLocationArgs {
@@ -502,4 +504,12 @@ export interface MutationToLoginArgs {
 }
 export interface MutationToLoginResolver<TParent = any, TResult = any> {
   (parent: TParent, args: MutationToLoginArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MutationToTriggerUsersArgs {
+  emails?: Array<string | null>;
+  description?: string;
+}
+export interface MutationToTriggerUsersResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: MutationToTriggerUsersArgs, context: any, info: GraphQLResolveInfo): TResult;
 }

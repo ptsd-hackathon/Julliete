@@ -163,6 +163,7 @@ input LocationInput{
 type Mutation{
     sendUserLocation(email: String, location: LocationInput, userOneSignalId: String): Boolean
     registerUser(user: UserRegistrationInput): Boolean
-    setUserSettings(userInfo: UserInformationInput): Boolean
+    setUserSettings(email: String, userInfo: UserInformationInput): Boolean
     login(email: String, password: String): Boolean
+    triggerUsers(emails: [String], description: String): Boolean
 }

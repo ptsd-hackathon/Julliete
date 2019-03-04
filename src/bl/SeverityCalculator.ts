@@ -4,7 +4,7 @@ export class SeverityCalculator {
     calculateAndSendAlert(severityObject: { placesSeverity: { severity: number } }, userOneSignalId: string) {
         console.log(severityObject);
         let onesignalConnector = new OnesignalConnector();
-        if (severityObject.placesSeverity.severity > 3) {
+        if (severityObject.placesSeverity.severity > 5) {
             onesignalConnector.send("OSHER HAMELECH!!!!!!!!!!!!!", userOneSignalId)
         }
     }
