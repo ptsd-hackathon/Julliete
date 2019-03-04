@@ -19,7 +19,6 @@ export class UsersService {
 
         return this.userDAL.getUserByEmail(user.email).then((response: any) => {
             if (response != null) {
-                throw new Error("User already exists");
                 return false;
             }
             return this.userDAL.save(user).then((response: any) => {
