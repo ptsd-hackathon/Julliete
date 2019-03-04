@@ -47,7 +47,7 @@ input UserInformationInput{
     address: AddressInput
     stressHours: [Int]
     stressfullPlaces: [String]
-    weatherTrigger: [WeatherTriggerInput]
+    weatherTriggers: [WeatherTriggerInput]
 }
 
 input WeatherTriggerInput{
