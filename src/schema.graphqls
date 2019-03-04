@@ -47,6 +47,12 @@ input UserInformationInput{
     address: AddressInput
     stressHours: [Int]
     stressfullPlaces: [String]
+    weatherTrigger: [WeatherTriggerInput]
+}
+
+input WeatherTriggerInput{
+    type: String
+    rate: Int
 }
 
 input AddressInput{
