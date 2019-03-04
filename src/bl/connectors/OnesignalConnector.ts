@@ -3,11 +3,11 @@ import axios from "axios";
 export class OnesignalConnector {
     private url: string = "https://onesignal.com/api/v1/notifications";
 
-    send(alertMessage: string) {
+    send(alertMessage: string, userOneSignalId: string) {
         let message = {
             app_id: "de69c52c-08b7-4984-8ecf-9f3eec316948",
             contents: {"en": alertMessage},
-            included_segments: ["All"]
+            include_player_ids: [userOneSignalId]
         };
 
         let token = 'N2JiYzMwNDMtNzBkNi00NzU2LWFhNWQtYWYyMWM3MDBkZWI4';

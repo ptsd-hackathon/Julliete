@@ -14,6 +14,7 @@ import { GraphQLResolveInfo } from 'graphql';
 export interface GQLQuery {
   users?: Array<GQLUser | null>;
   weatherPreferences?: GQLWeatherPreferences;
+  placesTypes?: Array<GQLPlaceInfo | null>;
 }
 
 export interface GQLUser {
@@ -99,6 +100,11 @@ export interface GQLRange {
   max?: number;
 }
 
+export interface GQLPlaceInfo {
+  type?: string;
+  title?: string;
+}
+
 export interface GQLMutation {
   sendUserLocation?: boolean;
   registerUser?: boolean;
@@ -144,8 +150,8 @@ export interface GQLCustomDateInput {
 }
 
 export interface GQLSleepingHoursInput {
-  bedHour?: number;
-  wakingHour?: number;
+  bedHour?: string;
+  wakingHour?: string;
 }
 
 export interface GQLContactInput {
@@ -193,11 +199,13 @@ export interface GQLResolver {
   WeatherPreferences?: GQLWeatherPreferencesTypeResolver;
   WeatherFamily?: GQLWeatherFamilyTypeResolver;
   Range?: GQLRangeTypeResolver;
+  PlaceInfo?: GQLPlaceInfoTypeResolver;
   Mutation?: GQLMutationTypeResolver;
 }
 export interface GQLQueryTypeResolver<TParent = any> {
   users?: QueryToUsersResolver<TParent>;
   weatherPreferences?: QueryToWeatherPreferencesResolver<TParent>;
+  placesTypes?: QueryToPlacesTypesResolver<TParent>;
 }
 
 export interface QueryToUsersResolver<TParent = any, TResult = any> {
@@ -205,6 +213,10 @@ export interface QueryToUsersResolver<TParent = any, TResult = any> {
 }
 
 export interface QueryToWeatherPreferencesResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface QueryToPlacesTypesResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -441,6 +453,19 @@ export interface RangeToMaxResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface GQLPlaceInfoTypeResolver<TParent = any> {
+  type?: PlaceInfoToTypeResolver<TParent>;
+  title?: PlaceInfoToTitleResolver<TParent>;
+}
+
+export interface PlaceInfoToTypeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface PlaceInfoToTitleResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface GQLMutationTypeResolver<TParent = any> {
   sendUserLocation?: MutationToSendUserLocationResolver<TParent>;
   registerUser?: MutationToRegisterUserResolver<TParent>;
@@ -451,6 +476,7 @@ export interface GQLMutationTypeResolver<TParent = any> {
 export interface MutationToSendUserLocationArgs {
   email?: string;
   location?: GQLLocationInput;
+  userOneSignalId?: string;
 }
 export interface MutationToSendUserLocationResolver<TParent = any, TResult = any> {
   (parent: TParent, args: MutationToSendUserLocationArgs, context: any, info: GraphQLResolveInfo): TResult;
