@@ -1,6 +1,6 @@
 import {GQLLocationInput, GQLUserRegistrationInput} from "../graphql-types";
 
-const {ApolloServer, gql} = require('apollo-server');
+const {ApolloServer} = require('apollo-server');
 import fs from "fs";
 import path from "path";
 import {scheduleJob} from "node-schedule";
@@ -8,16 +8,17 @@ import {UserRegistration} from "./bl/UserRegistration";
 import {EchoConnector} from "./bl/connectors/EchoConnector";
 import {LimaConnector} from "./bl/connectors/LimaConnector";
 import {LocationSender} from "./bl/LocationSender";
+import {UserDAL} from "./DAL/repositories/UserDAL";
 
-const userRegistration = new UserRegistration();
+
+
+const userRegistration = new UserRegistration(new UserDAL());
 const locationSender = new LocationSender(new EchoConnector(), new LimaConnector() );
 
 const resolvers = {
     Query: {
-        // user: () => { return {"id":"Asdf", "email":"yarinvak@gmail.com"} },
         users: () => {
-            console.log(userRegistration.usersFromDb);
-            return userRegistration.usersFromDb;
+            console.log("register");
         }
     },
     Mutation: {
