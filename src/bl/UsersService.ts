@@ -15,18 +15,17 @@ export class UsersService {
         return this.users.filter((user: GQLUserRegistrationInput) => user.email === email)[0];
     }
 
-    register(user: GQLUserRegistrationInput): boolean {
+    register(user: GQLUserRegistrationInput) {
 
-        this.userDAL.getUserByEmail(user.email).then((response: any) => {
+        return this.userDAL.getUserByEmail(user.email).then((response: any) => {
             if (response != null) {
-                console.log(response);
                 throw new Error("User already exists");
+                return false;
             }
             this.userDAL.save(user).then((response: any) => {
+                return true;
             }).catch((err: any) => console.log(err));
-            return true;
         }).catch((err) => console.log(err));
-        return false;
     }
 
     login(email: string, password: string) {
