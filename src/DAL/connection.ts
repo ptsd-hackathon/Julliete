@@ -52,4 +52,9 @@ export class dbConnection {
             return user;
         });
     }
+    public getUserByEmailAndPassword(email: string, password: string) {
+        return User.findOne({'email': email, 'password': password}).then(user => {
+            return user;
+        });
+    }
 }

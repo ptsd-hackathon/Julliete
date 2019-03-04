@@ -13,7 +13,7 @@ import {WhiskeyConnector} from "./bl/connectors/WhiskeyConnector";
 import {UserDAL} from "./DAL/repositories/UserDAL";
 
 
-const usersService = new UsersService();
+const usersService = new UsersService(new UserDAL());
 const locationSender = new LocationSender(new EchoConnector(), new LimaConnector());
 const userInformationSender = new UserInformationSender(new WhiskeyConnector());
 
