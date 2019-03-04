@@ -22,7 +22,7 @@ export class UsersService {
                 throw new Error("User already exists");
                 return false;
             }
-            this.userDAL.save(user).then((response: any) => {
+            return this.userDAL.save(user).then((response: any) => {
                 return true;
             }).catch((err: any) => console.log(err));
         }).catch((err) => console.log(err));
