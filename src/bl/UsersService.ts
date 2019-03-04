@@ -12,23 +12,26 @@ export class UsersService {
     }
 
     getUserByEmail(email: string) {
-        return this.users.filter((user: GQLUserRegistrationInput) => user.email === email)[0];
+        return this.userDAL.getUserByEmail(email);
     }
 
     register(user: GQLUserRegistrationInput) {
-
         return this.userDAL.getUserByEmail(user.email).then((response: any) => {
+            console.log("trying to register");
             if (response != null) {
-                return false;
+                throw new Error("user with this email already exists");
             }
             return this.userDAL.save(user).then((response: any) => {
                 return true;
-            }).catch((err: any) => console.log(err));
-        }).catch((err) => console.log(err));
+            }).catch((err: any) => {
+                throw new Error(err)
+            });
+        }).catch((err) => {
+            throw new Error(err)
+        });
     }
 
     login(email: string, password: string) {
-
         return this.userDAL.getUserByEmailAndPassword(email, password).then((response: any) => {
                 if (response != null) {
                     return true;

@@ -3,8 +3,10 @@ import axios from "axios";
 export class LimaConnector {
     url: string = "http://129.213.103.20:3000";
 
-    getCrowdedPlaces(coords: { lat: number, long: number }) {
-        axios.get(this.url + '/crowdedPlaces?lat="' + coords.lat + '"&lng="' + coords.long + '"&triggeringPlacesTypes=' + 'school,' + 'zoo').then((response: any) => {
+    getCrowdedPlaces(coords: { lat: number, long: number }, places: (string | null)[] | undefined) {
+        let placesString = places ? places.join() : "";
+        axios.get(this.url + '/crowdedPlaces?lat="' + coords.lat + '"&lng="' + coords.long +
+            '"&triggeringPlacesTypes=' + placesString).then((response: any) => {
             console.log("success calling Lima - Crowded Places");
             console.log(response.data);
         }).catch((err) => {
