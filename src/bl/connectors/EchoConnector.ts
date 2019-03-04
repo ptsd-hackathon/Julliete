@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 export class EchoConnector {
     connect(email: string, coords: { lat: number, long: number }) {
