@@ -5,7 +5,7 @@ export class EchoConnector {
         axios.post('http://132.145.145.146:3000/updateGpsUser',
             {user: email, coord: coords})
             .then((res) => {
-                console.log("success calling arik");
-            }).catch((err) => console.log(err));
+                console.log("success calling echo");
+            });
     }
 }

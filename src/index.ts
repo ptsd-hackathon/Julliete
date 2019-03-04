@@ -4,33 +4,44 @@ const {ApolloServer} = require('apollo-server');
 import fs from "fs";
 import path from "path";
 import {scheduleJob} from "node-schedule";
-import {UserRegistration} from "./bl/UserRegistration";
+import {UsersService} from "./bl/UsersService";
 import {EchoConnector} from "./bl/connectors/EchoConnector";
 import {LimaConnector} from "./bl/connectors/LimaConnector";
 import {LocationSender} from "./bl/LocationSender";
+import {UserInformationSender} from "./bl/UserInformationSender";
+import {WhiskeyConnector} from "./bl/connectors/WhiskeyConnector";
 import {UserDAL} from "./DAL/repositories/UserDAL";
 
 
-
-const userRegistration = new UserRegistration(new UserDAL());
-const locationSender = new LocationSender(new EchoConnector(), new LimaConnector() );
+const usersService = new UsersService();
+const locationSender = new LocationSender(new EchoConnector(), new LimaConnector());
+const userInformationSender = new UserInformationSender(new WhiskeyConnector());
 
 const resolvers = {
     Query: {
         users: () => {
-            console.log("register");
+            console.log(usersService.users);
+            return usersService.users;
+        },
+        weatherPreferences: () => {
+            let limaConnector = new LimaConnector();
+            return limaConnector.getWeatherPreferences().then((response: any) => {
+                return response.data;
+            }).catch((err) => {throw new Error(err);});
         }
     },
     Mutation: {
         sendUserLocation: (root: any, {email, location}: { email: string, location: GQLLocationInput }) => {
-            locationSender.sendLocation(email, {lat: location.lat, long:location.long});
+            locationSender.sendLocation(email, {lat: location.lat, long: location.long});
+            let userByEmail = usersService.getUserByEmail(email);
+            userInformationSender.sendUserInformation(userByEmail);
             return true;
         },
         registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
-            return userRegistration.registerUser(user);
+            return usersService.register(user);
         },
         login: (root: any, {email, password}: { email: string, password: string }) => {
-            return userRegistration.login(email, password);
+            return usersService.login(email, password);
         }
     }
 };
