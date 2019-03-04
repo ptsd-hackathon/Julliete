@@ -10,6 +10,7 @@ import {LimaConnector} from "./bl/connectors/LimaConnector";
 import {LocationSender} from "./bl/LocationSender";
 import {UserInformationSender} from "./bl/UserInformationSender";
 import {WhiskeyConnector} from "./bl/connectors/WhiskeyConnector";
+import {OnesignalConnector} from "./bl/connectors/OnesignalConnector";
 
 const usersService = new UsersService();
 const locationSender = new LocationSender(new EchoConnector(), new LimaConnector());
@@ -33,6 +34,8 @@ const resolvers = {
             locationSender.sendLocation(email, {lat: location.lat, long: location.long});
             let userByEmail = usersService.getUserByEmail(email);
             userInformationSender.sendUserInformation(userByEmail);
+            let onesignalConnector = new OnesignalConnector();
+            onesignalConnector.send("OSHER HAMELECH!!!!!!!!!!!!!")
             return true;
         },
         registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
