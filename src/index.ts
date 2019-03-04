@@ -28,7 +28,15 @@ const resolvers = {
             let limaConnector = new LimaConnector();
             return limaConnector.getWeatherPreferences().then((response: any) => {
                 return response.data;
-            }).catch((err) => {throw new Error(err);});
+            }).catch((err) => {
+                throw new Error(err);
+            });
+        },
+        placesTypes: () => {
+            let limaConnector = new LimaConnector();
+            return limaConnector.getPlaceTypes().then(res => {
+                return res.data.places;
+            }).catch(err => console.log(err.response));
         }
     },
     Mutation: {
