@@ -13,6 +13,7 @@ import {WhiskeyConnector} from "./bl/connectors/WhiskeyConnector";
 import {UserDAL} from "./DAL/repositories/UserDAL";
 
 import {OnesignalConnector} from "./bl/connectors/OnesignalConnector";
+import {SeverityCalculator} from "./bl/SeverityCalculator";
 
 const usersService = new UsersService(new UserDAL());
 const locationSender = new LocationSender(new EchoConnector(), new LimaConnector());
@@ -49,10 +50,18 @@ const resolvers = {
                     throw new Error("user does not exist");
                 }
                 console.log(userByEmail);
-                locationSender.sendLocation(email, {lat: location.lat, long: location.long}, userByEmail);
-                userInformationSender.sendUserInformation(userByEmail);
-                let onesignalConnector = new OnesignalConnector();
-                onesignalConnector.send("OSHER HAMELECH!!!!!!!!!!!!!", userOneSignalId)
+                locationSender.sendLocation(email, {
+                    lat: location.lat,
+                    long: location.long
+                }, userByEmail).then((placesSeverityResponse: any) => {
+                    userInformationSender.sendUserInformation(userByEmail);
+                    let severityObject = {placesSeverity: placesSeverityResponse.data};
+                    let severityCalculator = new SeverityCalculator();
+                    severityCalculator.calculateAndSendAlert(severityObject, userOneSignalId);
+                }).catch((err) => {
+                    throw new Error(err)
+                });
+
             });
             return true;
         },
