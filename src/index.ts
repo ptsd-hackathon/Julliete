@@ -40,12 +40,13 @@ const resolvers = {
         }
     },
     Mutation: {
-        sendUserLocation: (root: any, {email, location}: { email: string, location: GQLLocationInput }) => {
+        sendUserLocation: (root: any, {email, location, userOneSignalId}: { email: string, location: GQLLocationInput,
+            userOneSignalId: string }) => {
             locationSender.sendLocation(email, {lat: location.lat, long: location.long});
             let userByEmail = usersService.getUserByEmail(email);
             userInformationSender.sendUserInformation(userByEmail);
             let onesignalConnector = new OnesignalConnector();
-            onesignalConnector.send("OSHER HAMELECH!!!!!!!!!!!!!")
+            onesignalConnector.send("OSHER HAMELECH!!!!!!!!!!!!!", userOneSignalId)
             return true;
         },
         registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {

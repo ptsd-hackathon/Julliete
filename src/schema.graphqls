@@ -125,8 +125,8 @@ type SleepingHours{
 }
 
 input SleepingHoursInput{
-    bedHour: Int
-    wakingHour: Int
+    bedHour: String
+    wakingHour: String
 }
 
 type Query {
@@ -161,7 +161,7 @@ input LocationInput{
 }
 
 type Mutation{
-    sendUserLocation(email: String, location: LocationInput): Boolean
+    sendUserLocation(email: String, location: LocationInput, userOneSignalId: String): Boolean
     registerUser(user: UserRegistrationInput): Boolean
     setUserSettings(userInfo: UserInformationInput): Boolean
     login(email: String, password: String): Boolean
