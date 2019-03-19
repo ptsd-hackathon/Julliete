@@ -1,3 +1,5 @@
+scalar Date
+
 type User{
     id: String
     email: String
@@ -5,19 +7,22 @@ type User{
 }
 
 input UserRegistrationInput{
-    email: String
-    password: String
-    privateName: String
-    lastName: String
+    email: String!
+    password: String!
+    privateName: String!
+    lastName: String!
+    gender: String
+    dateOfBirth: Date
+    phoneNumber: String
 }
 
 type UserInformation{
     privateName: String
     lastName: String
     gender: Gender
-    dateOfBirth: CustomDate
+    dateOfBirth: Date
     phoneNumber: String
-    initialPanicAttackDate: CustomDate
+    initialPanicAttackDate: Date
     sleep: SleepingHours
     emergencyContacts: [Contact]
     isShabbatKeeper: Boolean
@@ -34,9 +39,9 @@ input UserInformationInput{
     privateName: String
     lastName: String
     gender: Gender
-    dateOfBirth: CustomDateInput
+    dateOfBirth: Date
     phoneNumber: String
-    initialPanicAttackDate: CustomDateInput
+    initialPanicAttackDate: Date
     sleep: SleepingHoursInput
     emergencyContacts: [ContactInput]
     isShabbatKeeper: Boolean

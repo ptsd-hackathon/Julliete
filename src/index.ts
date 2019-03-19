@@ -11,15 +11,15 @@ import {LocationSender} from "./bl/LocationSender";
 import {UserInformationSender} from "./bl/UserInformationSender";
 import {WhiskeyConnector} from "./bl/connectors/WhiskeyConnector";
 import {UserDAL} from "./DAL/repositories/UserDAL";
-
-import {OnesignalConnector} from "./bl/connectors/OnesignalConnector";
 import {SeverityCalculator} from "./bl/SeverityCalculator";
+import {dateScalarType} from "./scalars/data.scalar";
 
 const usersService = new UsersService(new UserDAL());
 const locationSender = new LocationSender(new EchoConnector(), new LimaConnector());
 const userInformationSender = new UserInformationSender(new WhiskeyConnector());
 
 const resolvers = {
+    Date: dateScalarType,
     Query: {
         users: () => {
             console.log(usersService.users);
@@ -45,7 +45,7 @@ const resolvers = {
             email: string, location: GQLLocationInput,
             userOneSignalId: string
         }) => {
-            usersService.getUserByEmail(email).then(userByEmail => {
+            usersService.getUserByEmail(email).then((userByEmail: any) => {
                 if (!userByEmail) {
                     throw new Error("user does not exist");
                 }

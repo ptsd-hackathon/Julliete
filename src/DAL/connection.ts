@@ -1,7 +1,4 @@
-import {connect, model} from 'mongoose';
-import {UserSchema} from "./types/User";
-
-export const User = model("User", UserSchema);
+import {connect} from 'mongoose';
 
 export class dbConnection {
     constructor() {
@@ -10,51 +7,9 @@ export class dbConnection {
             if (err) {
                 console.log(err.message);
                 console.log(err);
-            }
-            else {
+            } else {
                 console.log('Connected to MongoDb');
             }
-        });
-    }
-
-    public addUser(user: any) {
-        return new User(user).save().then((x: any) => {
-            return x;
-        });
-    }
-
-    public getAllUsers() {
-        return User.find().then(users => {
-            return users;
-        });
-    }
-
-    public getUserById(id: string) {
-        return User.findById(id).then(users => {
-            return users;
-        });
-    }
-
-    public deleteUserById(id: string) {
-        return User.deleteOne({_id: id}).then(users => {
-            return users;
-        });
-    }
-
-    public updateUser(id: string, u: any) {
-        return User.findByIdAndUpdate(id, u).then(users => {
-            return users;
-        });
-    }
-
-    public findByEmail(email: string) {
-        return User.findOne({'email': email}).then(user => {
-            return user;
-        });
-    }
-    public getUserByEmailAndPassword(email: string, password: string) {
-        return User.findOne({'email': email, 'password': password}).then(user => {
-            return user;
         });
     }
 }

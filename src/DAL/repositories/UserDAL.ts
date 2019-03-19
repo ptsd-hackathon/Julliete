@@ -1,26 +1,38 @@
 import {dbConnection} from "../connection";
+import {User} from "../types/User";
 
 export class UserDAL {
-
     private connection: dbConnection;
 
     constructor() {
         this.connection = new dbConnection();
     }
 
-    public getUserByEmail(email: any) {
-        return this.connection.findByEmail(email);
+    public findByEmail(email: string) {
+        return User.findOne({'email': email});
     }
 
-    public getUserByEmailAndPassword(email: any, password: any) {
-        return this.connection.getUserByEmailAndPassword(email, password);
+    public getUserByEmailAndPassword(email: string, password: string) {
+        return User.findOne({'email': email, 'password': password});
     }
 
     public getAllUsers() {
-        return this.connection.getAllUsers();
+        return User.find();
     }
 
-    public save(user : any) {
-        return this.connection.addUser(user);
+    public getUserById(id: string) {
+        return User.findById(id);
+    }
+
+    public update(id: string, user: any) {
+        return User.findByIdAndUpdate(id, user);
+    }
+    
+    public deleteUserById(id: string) {
+        return User.deleteOne({_id: id});
+    }
+
+    public save(user: any) {
+        return new User(user).save();
     }
 }
