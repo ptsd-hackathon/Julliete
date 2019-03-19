@@ -116,20 +116,6 @@ input ContactInput{
     name: String
 }
 
-
-type CustomDate{
-    day: String
-    month: String
-    year: String
-}
-
-input CustomDateInput{
-    day: String
-    month: String
-    year: String
-}
-
-
 type SleepingHours{
     bedHour: Int
     wakingHour: Int

@@ -176,18 +176,6 @@ export interface GQLWeatherTriggerInput {
   rate?: number;
 }
 
-export interface GQLCustomDate {
-  day?: string;
-  month?: string;
-  year?: string;
-}
-
-export interface GQLCustomDateInput {
-  day?: string;
-  month?: string;
-  year?: string;
-}
-
 /*********************************
  *                               *
  *         TYPE RESOLVERS        *
@@ -213,7 +201,6 @@ export interface GQLResolver {
   Range?: GQLRangeTypeResolver;
   PlaceInfo?: GQLPlaceInfoTypeResolver;
   Mutation?: GQLMutationTypeResolver;
-  CustomDate?: GQLCustomDateTypeResolver;
 }
 export interface GQLQueryTypeResolver<TParent = any> {
   users?: QueryToUsersResolver<TParent>;
@@ -507,22 +494,4 @@ export interface MutationToTriggerUsersArgs {
 }
 export interface MutationToTriggerUsersResolver<TParent = any, TResult = any> {
   (parent: TParent, args: MutationToTriggerUsersArgs, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLCustomDateTypeResolver<TParent = any> {
-  day?: CustomDateToDayResolver<TParent>;
-  month?: CustomDateToMonthResolver<TParent>;
-  year?: CustomDateToYearResolver<TParent>;
-}
-
-export interface CustomDateToDayResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface CustomDateToMonthResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface CustomDateToYearResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
