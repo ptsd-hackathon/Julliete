@@ -1,28 +1,29 @@
+import * as mongoose from "mongoose";
 import {model, Schema} from "mongoose";
 
-export interface UserDB {
+export interface UserDB extends mongoose.Document {
     email: string,
     password: string,
     privateName: string,
     lastName: string,
     gender: string,
     dateOfBirth: Date,
-    phoneNumber: string | null,
-    address: { state: string, city: string, street: string, apartment: string } | null,
-    emergencyContacts: [{ phoneNumber: string, name: string }] | null,
-    familyStatus: { isMarried: boolean, numberOfChildren: number } | null,
-    medicalInformation: {
-        initialPanicAttackDate: Date | null,
-        traumaType: string | null,
-        sleep: { bedHour: number, wakingHour: number } | null,
-        isSmoking: boolean | null,
-        isTakingDrugs: boolean | null,
-        drugs: [string] | null,
-        stressHours: [number] | null,
-        stressFullPlaces: [string] | null,
-        weatherTriggers: [{ type: string, rate: number }] | null
-    } | null,
-    lastLocation: { latitude: number, longitude: number, expires: Date } | null
+    phoneNumber?: string,
+    address?: { state: string, city: string, street: string, apartment: string },
+    emergencyContacts?: [{ phoneNumber: string, name: string }],
+    familyStatus?: { isMarried: boolean, numberOfChildren: number },
+    medicalInformation?: {
+        initialPanicAttackDate?: Date,
+        traumaType?: string,
+        sleep?: { bedHour: number, wakingHour: number },
+        isSmoking?: boolean,
+        isTakingDrugs?: boolean,
+        drugs?: [string],
+        stressHours?: [number],
+        stressFullPlaces?: [string],
+        weatherTriggers?: [{ type: string, rate: number }]
+    },
+    lastLocation?: { latitude: number, longitude: number, expires: Date }
 }
 
 const UserSchema: Schema = new Schema({
@@ -50,5 +51,5 @@ const UserSchema: Schema = new Schema({
     lastLocation: {latitude: Number, longitude: Number, expires: Date}
 });
 
-export const User = model("User", UserSchema);
+export const User = model<UserDB>("User", UserSchema);
 

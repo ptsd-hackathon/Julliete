@@ -1,4 +1,4 @@
-import {GQLLocationInput, GQLUserRegistrationInput} from "../graphql-types";
+import {GQLLocationInput, GQLUserInformationInput, GQLUserRegistrationInput} from "../graphql-types";
 import fs from "fs";
 import path from "path";
 import {scheduleJob} from "node-schedule";
@@ -71,6 +71,9 @@ const resolvers = {
         },
         login: (root: any, {email, password}: { email: string, password: string }) => {
             return usersService.login(email, password);
+        },
+        setUserInformation: (root: any, {email, userInfo}: { email: string, userInfo: GQLUserInformationInput }) => {
+            return usersService.setUserInformation(email, userInfo);
         }
     }
 };

@@ -61,10 +61,10 @@ input WeatherTriggerInput{
 }
 
 input AddressInput{
-    state: String
-    city: String
-    street: String
-    apartment: String
+    state: String!
+    city: String!
+    street: String!
+    apartment: String!
 }
 
 type Address{
@@ -160,7 +160,7 @@ input LocationInput{
 type Mutation{
     sendUserLocation(email: String, location: LocationInput, userOneSignalId: String): Boolean
     registerUser(user: UserRegistrationInput): Boolean
-    setUserSettings(email: String, userInfo: UserInformationInput): Boolean
+    setUserInformation(email: String, userInfo: UserInformationInput): Boolean
     login(email: String, password: String): Boolean
     triggerUsers(emails: [String], description: String): Boolean
 }
