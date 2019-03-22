@@ -11,9 +11,9 @@ input UserRegistrationInput{
     password: String!
     privateName: String!
     lastName: String!
-    gender: String
-    dateOfBirth: Date
-    phoneNumber: String
+    gender: String!
+    dateOfBirth: Date!
+    phoneNumber: String!
 }
 
 type UserInformation{

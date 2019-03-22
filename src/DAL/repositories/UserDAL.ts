@@ -1,5 +1,5 @@
 import {dbConnection} from "../connection";
-import {User} from "../types/User";
+import {User, UserDB} from "../types/User";
 
 export class UserDAL {
     private connection: dbConnection;
@@ -27,12 +27,12 @@ export class UserDAL {
     public update(id: string, user: any) {
         return User.findByIdAndUpdate(id, user);
     }
-    
+
     public deleteUserById(id: string) {
         return User.deleteOne({_id: id});
     }
 
-    public save(user: any) {
+    public save(user: UserDB) {
         return new User(user).save();
     }
 }

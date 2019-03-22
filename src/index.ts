@@ -1,6 +1,4 @@
 import {GQLLocationInput, GQLUserRegistrationInput} from "../graphql-types";
-
-const {ApolloServer} = require('apollo-server');
 import fs from "fs";
 import path from "path";
 import {scheduleJob} from "node-schedule";
@@ -12,7 +10,9 @@ import {UserInformationSender} from "./bl/UserInformationSender";
 import {WhiskeyConnector} from "./bl/connectors/WhiskeyConnector";
 import {UserDAL} from "./DAL/repositories/UserDAL";
 import {SeverityCalculator} from "./bl/SeverityCalculator";
-import {dateScalarType} from "./scalars/data.scalar";
+import {dateScalarType} from "./scalars/date.scalar";
+
+const {ApolloServer} = require('apollo-server');
 
 const usersService = new UsersService(new UserDAL());
 const locationSender = new LocationSender(new EchoConnector(), new LimaConnector());
@@ -66,6 +66,7 @@ const resolvers = {
             return true;
         },
         registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
+            console.log("saved user: " + JSON.stringify(user));
             return usersService.register(user);
         },
         login: (root: any, {email, password}: { email: string, password: string }) => {

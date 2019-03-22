@@ -1,6 +1,6 @@
-import {GQLUser, GQLUserInformation, GQLUserRegistrationInput} from "../../graphql-types";
+import {GQLUserInformation, GQLUserRegistrationInput} from "../../graphql-types";
 import {UserDAL} from "../DAL/repositories/UserDAL";
-import {isBoolean} from "util";
+import {UserDB} from "../DAL/types/User";
 
 export class UsersService {
     // @ts-ignore
@@ -12,17 +12,18 @@ export class UsersService {
     }
 
     getUserByEmail(email: string) {
-        return this.userDAL.getUserByEmail(email);
+        return this.userDAL.findByEmail(email);
     }
 
     register(user: GQLUserRegistrationInput) {
-        return this.userDAL.getUserByEmail(user.email).then((response: any) => {
-            console.log("trying to register");
+        return this.userDAL.findByEmail(user.email).then((response: any) => {
             if (response != null) {
                 throw new Error("user with this email already exists");
             }
-            return this.userDAL.save(user).then((response: any) => {
-                return true;
+            let userDB = this.createUserDB(user);
+            return this.userDAL.save(userDB)
+                .then(() => {
+                    return true;
             }).catch((err: any) => {
                 throw new Error(err)
             });
@@ -39,5 +40,19 @@ export class UsersService {
                 return false;
             }
         ).catch((err) => console.log(err));
+    }
+
+    private createUserDB(user: GQLUserRegistrationInput): UserDB {
+        console.log("date of birth " + user.dateOfBirth);
+        // @ts-ignore
+        return {
+            email: user.email,
+            password: user.password,
+            privateName: user.privateName,
+            lastName: user.lastName,
+            gender: user.gender,
+            dateOfBirth: user.dateOfBirth,
+            phoneNumber: user.phoneNumber
+        };
     }
 }
