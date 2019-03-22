@@ -9,7 +9,6 @@ import {LocationSender} from "./bl/LocationSender";
 import {UserInformationSender} from "./bl/UserInformationSender";
 import {WhiskeyConnector} from "./bl/connectors/WhiskeyConnector";
 import {UserDAL} from "./DAL/repositories/UserDAL";
-import {SeverityCalculator} from "./bl/SeverityCalculator";
 import {dateScalarType} from "./scalars/date.scalar";
 
 const {ApolloServer} = require('apollo-server');
@@ -41,29 +40,29 @@ const resolvers = {
         }
     },
     Mutation: {
-        sendUserLocation: (root: any, {email, location, userOneSignalId}: {
-            email: string, location: GQLLocationInput,
-            userOneSignalId: string
+        sendUserLocation: (root: any, {email, location}: {
+            email: string, location: GQLLocationInput
         }) => {
-            usersService.getUserByEmail(email).then((userByEmail: any) => {
-                if (!userByEmail) {
-                    throw new Error("user does not exist");
-                }
-                console.log(userByEmail);
-                locationSender.sendLocation(email, {
-                    lat: location.lat,
-                    long: location.long
-                }, userByEmail).then((placesSeverityResponse: any) => {
-                    userInformationSender.sendUserInformation(userByEmail);
-                    let severityObject = {placesSeverity: placesSeverityResponse.data};
-                    let severityCalculator = new SeverityCalculator();
-                    severityCalculator.calculateAndSendAlert(severityObject, userOneSignalId);
-                }).catch((err) => {
-                    throw new Error(err)
-                });
-
-            });
-            return true;
+            // usersService.getUserByEmail(email).then((userByEmail: any) => {
+            //     if (!userByEmail) {
+            //         throw new Error("user does not exist");
+            //     }
+            //     console.log(userByEmail);
+            //     locationSender.sendLocation(email, {
+            //         lat: location.lat,
+            //         long: location.long
+            //     }, userByEmail).then((placesSeverityResponse: any) => {
+            //         userInformationSender.sendUserInformation(userByEmail);
+            //         let severityObject = {placesSeverity: placesSeverityResponse.data};
+            //         let severityCalculator = new SeverityCalculator();
+            //         severityCalculator.calculateAndSendAlert(severityObject, userOneSignalId);
+            //     }).catch((err) => {
+            //         throw new Error(err)
+            //     });
+            //
+            // });
+            // return true;
+            return usersService.updateUserLocation(email, location);
         },
         registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
             console.log("saved user: " + JSON.stringify(user));

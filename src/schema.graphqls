@@ -158,7 +158,7 @@ input LocationInput{
 }
 
 type Mutation{
-    sendUserLocation(email: String, location: LocationInput, userOneSignalId: String): Boolean
+    sendUserLocation(email: String, location: LocationInput): Boolean
     registerUser(user: UserRegistrationInput): Boolean
     setUserInformation(email: String, userInfo: UserInformationInput): Boolean
     login(email: String, password: String): Boolean

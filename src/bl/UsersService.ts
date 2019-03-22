@@ -1,4 +1,9 @@
-import {GQLUserInformation, GQLUserInformationInput, GQLUserRegistrationInput} from "../../graphql-types";
+import {
+    GQLLocationInput,
+    GQLUserInformation,
+    GQLUserInformationInput,
+    GQLUserRegistrationInput
+} from "../../graphql-types";
 import {UserDAL} from "../DAL/repositories/UserDAL";
 import {UserDB} from "../DAL/types/User";
 
@@ -13,6 +18,25 @@ export class UsersService {
 
     getUserByEmail(email: string) {
         return this.userDAL.findByEmail(email);
+    }
+
+    updateUserLocation(email: string, location: GQLLocationInput) {
+        return this.userDAL.findByEmail(email).then((user: UserDB | null) => {
+            if (!user) {
+                throw new Error("No user found");
+            }
+            let expiryDate = new Date();
+            expiryDate.setMinutes(expiryDate.getMinutes() + 30);
+            user.lastLocation = {longitude: location.long, latitude: location.lat, expires: expiryDate};
+            return this.userDAL.save(user).then(() => {
+                console.log("user " + email + " location updated successfully");
+                return true;
+            }).catch(err => {
+                throw new Error(err);
+            });
+        }).catch(err => {
+            throw new Error(err);
+        });
     }
 
     register(user: GQLUserRegistrationInput) {
