@@ -1,5 +1,20 @@
 scalar Date
 
+type Query {
+    users: [User]
+    weatherPreferences: WeatherPreferences
+    placesTypes: [PlaceInfo],
+    userCondition(email: String!): UserCondition
+}
+
+type Mutation{
+    sendUserLocation(email: String, location: LocationInput): Boolean
+    registerUser(user: UserRegistrationInput): Boolean
+    setUserInformation(email: String, userInfo: UserInformationInput): Boolean
+    login(email: String, password: String): Boolean
+    triggerUsers(emails: [String], description: String): Boolean
+}
+
 type User{
     id: String
     email: String
@@ -33,6 +48,32 @@ type UserInformation{
     address: Address
     stressHours: [Int]
     stressfullPlaces: [String]
+}
+
+type UserCondition{
+    weatherCondition: WeatherSeverityCondition
+    placesCondition: PlacesSeverityCondition
+    newsCondition: NewsSeverityCondition
+}
+
+type WeatherSeverityCondition{
+    currentWeatherType: String
+    severity: Int
+}
+
+type PlacesSeverityCondition{
+    currentPlaceType: String
+    severity: Int
+}
+
+type NewsSeverityCondition{
+    severeNewsArray: [NewsObject]
+}
+
+type NewsObject{
+    title: String!,
+    url: String!,
+    severity: Int!
 }
 
 input UserInformationInput{
@@ -126,11 +167,6 @@ input SleepingHoursInput{
     wakingHour: String
 }
 
-type Query {
-    users: [User]
-    weatherPreferences: WeatherPreferences
-    placesTypes: [PlaceInfo]
-}
 
 type WeatherFamily{
     type: String,
@@ -155,12 +191,4 @@ type PlaceInfo{
 input LocationInput{
     lat: Float!
     long: Float!
-}
-
-type Mutation{
-    sendUserLocation(email: String, location: LocationInput): Boolean
-    registerUser(user: UserRegistrationInput): Boolean
-    setUserInformation(email: String, userInfo: UserInformationInput): Boolean
-    login(email: String, password: String): Boolean
-    triggerUsers(emails: [String], description: String): Boolean
 }

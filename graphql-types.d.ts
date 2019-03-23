@@ -16,6 +16,7 @@ export interface GQLQuery {
   users?: Array<GQLUser | null>;
   weatherPreferences?: GQLWeatherPreferences;
   placesTypes?: Array<GQLPlaceInfo | null>;
+    userCondition?: GQLUserCondition;
 }
 
 export interface GQLUser {
@@ -100,6 +101,32 @@ export interface GQLRange {
 export interface GQLPlaceInfo {
   type?: string;
   title?: string;
+}
+
+export interface GQLUserCondition {
+    weatherCondition?: GQLWeatherSeverityCondition;
+    placesCondition?: GQLPlacesSeverityCondition;
+    newsCondition?: GQLNewsSeverityCondition;
+}
+
+export interface GQLWeatherSeverityCondition {
+    currentWeatherType?: string;
+    severity?: number;
+}
+
+export interface GQLPlacesSeverityCondition {
+    currentPlaceType?: string;
+    severity?: number;
+}
+
+export interface GQLNewsSeverityCondition {
+    severeNewsArray?: Array<GQLNewsObject | null>;
+}
+
+export interface GQLNewsObject {
+    title: string;
+    url: string;
+    severity: number;
 }
 
 export interface GQLMutation {
@@ -201,12 +228,18 @@ export interface GQLResolver {
   WeatherFamily?: GQLWeatherFamilyTypeResolver;
   Range?: GQLRangeTypeResolver;
   PlaceInfo?: GQLPlaceInfoTypeResolver;
+    UserCondition?: GQLUserConditionTypeResolver;
+    WeatherSeverityCondition?: GQLWeatherSeverityConditionTypeResolver;
+    PlacesSeverityCondition?: GQLPlacesSeverityConditionTypeResolver;
+    NewsSeverityCondition?: GQLNewsSeverityConditionTypeResolver;
+    NewsObject?: GQLNewsObjectTypeResolver;
   Mutation?: GQLMutationTypeResolver;
 }
 export interface GQLQueryTypeResolver<TParent = any> {
   users?: QueryToUsersResolver<TParent>;
   weatherPreferences?: QueryToWeatherPreferencesResolver<TParent>;
   placesTypes?: QueryToPlacesTypesResolver<TParent>;
+    userCondition?: QueryToUserConditionResolver<TParent>;
 }
 
 export interface QueryToUsersResolver<TParent = any, TResult = any> {
@@ -219,6 +252,14 @@ export interface QueryToWeatherPreferencesResolver<TParent = any, TResult = any>
 
 export interface QueryToPlacesTypesResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface QueryToUserConditionArgs {
+    email: string;
+}
+
+export interface QueryToUserConditionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToUserConditionArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface GQLUserTypeResolver<TParent = any> {
@@ -447,6 +488,76 @@ export interface PlaceInfoToTypeResolver<TParent = any, TResult = any> {
 
 export interface PlaceInfoToTitleResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLUserConditionTypeResolver<TParent = any> {
+    weatherCondition?: UserConditionToWeatherConditionResolver<TParent>;
+    placesCondition?: UserConditionToPlacesConditionResolver<TParent>;
+    newsCondition?: UserConditionToNewsConditionResolver<TParent>;
+}
+
+export interface UserConditionToWeatherConditionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserConditionToPlacesConditionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserConditionToNewsConditionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLWeatherSeverityConditionTypeResolver<TParent = any> {
+    currentWeatherType?: WeatherSeverityConditionToCurrentWeatherTypeResolver<TParent>;
+    severity?: WeatherSeverityConditionToSeverityResolver<TParent>;
+}
+
+export interface WeatherSeverityConditionToCurrentWeatherTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface WeatherSeverityConditionToSeverityResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLPlacesSeverityConditionTypeResolver<TParent = any> {
+    currentPlaceType?: PlacesSeverityConditionToCurrentPlaceTypeResolver<TParent>;
+    severity?: PlacesSeverityConditionToSeverityResolver<TParent>;
+}
+
+export interface PlacesSeverityConditionToCurrentPlaceTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface PlacesSeverityConditionToSeverityResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLNewsSeverityConditionTypeResolver<TParent = any> {
+    severeNewsArray?: NewsSeverityConditionToSevereNewsArrayResolver<TParent>;
+}
+
+export interface NewsSeverityConditionToSevereNewsArrayResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLNewsObjectTypeResolver<TParent = any> {
+    title?: NewsObjectToTitleResolver<TParent>;
+    url?: NewsObjectToUrlResolver<TParent>;
+    severity?: NewsObjectToSeverityResolver<TParent>;
+}
+
+export interface NewsObjectToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NewsObjectToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface NewsObjectToSeverityResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface GQLMutationTypeResolver<TParent = any> {

@@ -9,6 +9,7 @@ import {BodyStatsServiceConnector} from "./bl/connectors/bodyStatsService.connec
 import {UsersRepository} from "./DAL/repositories/usersRepository";
 import {dateScalarType} from "./scalars/date.scalar";
 import {UserConditionService} from "./bl/services/userConditionService";
+import {UserDB} from "./DAL/types/user";
 
 const {ApolloServer} = require('apollo-server');
 
@@ -19,10 +20,6 @@ const statsService: UserConditionService = new UserConditionService(new NewsSeve
 const resolvers = {
     Date: dateScalarType,
     Query: {
-        // users: () => {
-        //     console.log(usersService.users);
-        //     return usersService.users;
-        // },
         weatherPreferences: () => {
             let limaConnector = new WeatherAndCrowdedPlacesServiceConnector();
             return limaConnector.getWeatherPreferences().then((response: any) => {
@@ -36,6 +33,17 @@ const resolvers = {
             return limaConnector.getPlaceTypes().then(res => {
                 return res.data.places;
             }).catch(err => console.log(err.response));
+        },
+        userCondition: (root: any, {email}: { email: string }) => {
+            return usersService.getUserByEmail(email).then((user: UserDB | null) => {
+                if (!user) {
+                    throw new Error("No user found");
+                } else {
+                    return user.userCondition;
+                }
+            }).catch(err => {
+                throw new Error(err);
+            });
         }
     },
     Mutation: {
@@ -54,7 +62,7 @@ const resolvers = {
         setUserInformation: (root: any, {email, userInfo}: { email: string, userInfo: GQLUserInformationInput }) => {
             return usersService.setUserInformation(email, userInfo);
         }
-    }
+    },
 };
 
 const typeDefs = fs.readFileSync(path.join(__dirname, "schema.graphqls"), "utf8");
