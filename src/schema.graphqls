@@ -1,7 +1,6 @@
 scalar Date
 
 type Query {
-    users: [User]
     weatherPreferences: WeatherPreferences
     placesTypes: [PlaceInfo],
     userCondition(email: String!): UserCondition
@@ -12,7 +11,6 @@ type Mutation{
     registerUser(user: UserRegistrationInput): Boolean
     setUserInformation(email: String, userInfo: UserInformationInput): Boolean
     login(email: String, password: String): Boolean
-    triggerUsers(emails: [String], description: String): Boolean
 }
 
 type User{
