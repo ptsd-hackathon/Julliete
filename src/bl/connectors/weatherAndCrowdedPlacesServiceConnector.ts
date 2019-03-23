@@ -1,7 +1,6 @@
 import axios from "axios";
-import {GQLWeatherTriggerInput} from "../../../graphql-types";
 
-export class LimaConnector {
+export class WeatherAndCrowdedPlacesServiceConnector {
     url: string = "http://129.213.103.20:3000";
 
     getCrowdedPlaces(coords: { lat: number, long: number }, places: (string | null)[] | undefined) {
@@ -20,7 +19,7 @@ export class LimaConnector {
         return axios.get(this.url + "/placesTypes");
     }
 
-    getWeathersSeverity(coords: { lat: number, long: number }, weatherTriggers: [GQLWeatherTriggerInput]) {
+    getWeathersSeverity(coords: { lat: number, long: number }, weatherTriggers: [{ type: string, rate: number }]) {
         weatherTriggers = [{type: "snow", rate: 5}];
         return axios.post(this.url + '/weathers', {coords: coords, weatherTriggers: weatherTriggers});
     }

@@ -1,10 +1,10 @@
-import {WhiskeyConnector} from "./connectors/WhiskeyConnector";
+import {BodyStatsServiceConnector} from "./connectors/bodyStatsService.connector";
 import {GQLUser} from "../../graphql-types";
 
 export class UserInformationSender {
-    private whiskeyConnector: WhiskeyConnector;
+    private whiskeyConnector: BodyStatsServiceConnector;
 
-    constructor(whiskeyConnector: WhiskeyConnector) {
+    constructor(whiskeyConnector: BodyStatsServiceConnector) {
         this.whiskeyConnector = whiskeyConnector;
     }
 

@@ -1,15 +1,9 @@
-import {
-    GQLLocationInput,
-    GQLUserInformation,
-    GQLUserInformationInput,
-    GQLUserRegistrationInput
-} from "../../graphql-types";
-import {UserDAL} from "../DAL/repositories/UserDAL";
-import {UserDB} from "../DAL/types/User";
+import {GQLLocationInput, GQLUserInformationInput, GQLUserRegistrationInput} from "../../../graphql-types";
+import {UserDAL} from "../../DAL/repositories/UserDAL";
+import {UserDB} from "../../DAL/types/User";
 
 export class UsersService {
     // @ts-ignore
-    public users: [{ email: string, password: string, userInformation: GQLUserInformation }] = [];
     public userDAL: UserDAL;
 
     constructor(userDAL: UserDAL) {
@@ -18,6 +12,10 @@ export class UsersService {
 
     getUserByEmail(email: string) {
         return this.userDAL.findByEmail(email);
+    }
+
+    getAllActiveLocationUsers() {
+        return this.userDAL.findByLocationExpiryTime(new Date());
     }
 
     updateUserLocation(email: string, location: GQLLocationInput) {

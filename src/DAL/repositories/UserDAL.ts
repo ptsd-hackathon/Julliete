@@ -8,6 +8,10 @@ export class UserDAL {
         this.connection = new dbConnection();
     }
 
+    public findByLocationExpiryTime(currentTime: Date) {
+        return User.find({'expires': {$gte: currentTime}});
+    }
+
     public findByEmail(email: string) {
         return User.findOne({'email': email});
     }

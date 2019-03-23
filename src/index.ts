@@ -2,30 +2,33 @@ import {GQLLocationInput, GQLUserInformationInput, GQLUserRegistrationInput} fro
 import fs from "fs";
 import path from "path";
 import {scheduleJob} from "node-schedule";
-import {UsersService} from "./bl/UsersService";
-import {EchoConnector} from "./bl/connectors/EchoConnector";
-import {LimaConnector} from "./bl/connectors/LimaConnector";
-import {LocationSender} from "./bl/LocationSender";
+import {UsersService} from "./bl/services/usersService";
+import {NewsSeverityServiceConnector} from "./bl/connectors/newsServerityService.connector";
+import {WeatherAndCrowdedPlacesServiceConnector} from "./bl/connectors/weatherAndCrowdedPlacesServiceConnector";
+import {LocationSender} from "./bl/locationSender";
 import {UserInformationSender} from "./bl/UserInformationSender";
-import {WhiskeyConnector} from "./bl/connectors/WhiskeyConnector";
+import {BodyStatsServiceConnector} from "./bl/connectors/bodyStatsService.connector";
 import {UserDAL} from "./DAL/repositories/UserDAL";
 import {dateScalarType} from "./scalars/date.scalar";
+import {UserConditionService} from "./bl/services/userConditionService";
 
 const {ApolloServer} = require('apollo-server');
 
 const usersService = new UsersService(new UserDAL());
-const locationSender = new LocationSender(new EchoConnector(), new LimaConnector());
-const userInformationSender = new UserInformationSender(new WhiskeyConnector());
+const locationSender = new LocationSender(new NewsSeverityServiceConnector(), new WeatherAndCrowdedPlacesServiceConnector());
+const userInformationSender = new UserInformationSender(new BodyStatsServiceConnector());
+const statsService: UserConditionService = new UserConditionService(new NewsSeverityServiceConnector(), new WeatherAndCrowdedPlacesServiceConnector(), new BodyStatsServiceConnector(), usersService);
+
 
 const resolvers = {
     Date: dateScalarType,
     Query: {
-        users: () => {
-            console.log(usersService.users);
-            return usersService.users;
-        },
+        // users: () => {
+        //     console.log(usersService.users);
+        //     return usersService.users;
+        // },
         weatherPreferences: () => {
-            let limaConnector = new LimaConnector();
+            let limaConnector = new WeatherAndCrowdedPlacesServiceConnector();
             return limaConnector.getWeatherPreferences().then((response: any) => {
                 return response.data;
             }).catch((err) => {
@@ -33,7 +36,7 @@ const resolvers = {
             });
         },
         placesTypes: () => {
-            let limaConnector = new LimaConnector();
+            let limaConnector = new WeatherAndCrowdedPlacesServiceConnector();
             return limaConnector.getPlaceTypes().then(res => {
                 return res.data.places;
             }).catch(err => console.log(err.response));
@@ -86,6 +89,7 @@ server.listen().then(({url}: { url: string }) => {
 });
 
 const scheduler = scheduleJob('*/5 * * * * *', function () {
-    // console.log('Sending Request');
+    console.log("scheduled task is running now");
+    statsService.calculateStats();
 });
 
