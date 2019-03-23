@@ -2,7 +2,7 @@ import {NewsSeverityServiceConnector} from "../connectors/newsServerityService.c
 import {WeatherAndCrowdedPlacesServiceConnector} from "../connectors/weatherAndCrowdedPlacesServiceConnector";
 import {BodyStatsServiceConnector} from "../connectors/bodyStatsService.connector";
 import {UsersService} from "./usersService";
-import {UserDB} from "../../DAL/types/User";
+import {UserDB} from "../../DAL/types/user";
 
 export class UserConditionService {
     private newsServerityServiceConnector: NewsSeverityServiceConnector;

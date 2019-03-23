@@ -1,12 +1,12 @@
 import {GQLLocationInput, GQLUserInformationInput, GQLUserRegistrationInput} from "../../../graphql-types";
-import {UserDAL} from "../../DAL/repositories/UserDAL";
-import {UserDB} from "../../DAL/types/User";
+import {UsersRepository} from "../../DAL/repositories/usersRepository";
+import {UserDB} from "../../DAL/types/user";
 
 export class UsersService {
     // @ts-ignore
-    public userDAL: UserDAL;
+    public userDAL: UsersRepository;
 
-    constructor(userDAL: UserDAL) {
+    constructor(userDAL: UsersRepository) {
         this.userDAL = userDAL;
     }
 

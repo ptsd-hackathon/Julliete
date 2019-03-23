@@ -1,7 +1,7 @@
-import {dbConnection} from "../connection";
-import {User, UserDB} from "../types/User";
+import {dbConnection} from "../dbConnection";
+import {User, UserDB} from "../types/user";
 
-export class UserDAL {
+export class UsersRepository {
     private connection: dbConnection;
 
     constructor() {

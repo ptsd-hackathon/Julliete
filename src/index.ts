@@ -8,13 +8,13 @@ import {WeatherAndCrowdedPlacesServiceConnector} from "./bl/connectors/weatherAn
 import {LocationSender} from "./bl/locationSender";
 import {UserInformationSender} from "./bl/UserInformationSender";
 import {BodyStatsServiceConnector} from "./bl/connectors/bodyStatsService.connector";
-import {UserDAL} from "./DAL/repositories/UserDAL";
+import {UsersRepository} from "./DAL/repositories/usersRepository";
 import {dateScalarType} from "./scalars/date.scalar";
 import {UserConditionService} from "./bl/services/userConditionService";
 
 const {ApolloServer} = require('apollo-server');
 
-const usersService = new UsersService(new UserDAL());
+const usersService = new UsersService(new UsersRepository());
 const locationSender = new LocationSender(new NewsSeverityServiceConnector(), new WeatherAndCrowdedPlacesServiceConnector());
 const userInformationSender = new UserInformationSender(new BodyStatsServiceConnector());
 const statsService: UserConditionService = new UserConditionService(new NewsSeverityServiceConnector(), new WeatherAndCrowdedPlacesServiceConnector(), new BodyStatsServiceConnector(), usersService);
