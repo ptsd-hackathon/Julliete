@@ -1,32 +1,27 @@
-import {GQLLocationInput, GQLUserRegistrationInput} from "../graphql-types";
-
-const {ApolloServer} = require('apollo-server');
+import {GQLLocationInput, GQLUserInformationInput, GQLUserRegistrationInput} from "../graphql-types";
 import fs from "fs";
 import path from "path";
 import {scheduleJob} from "node-schedule";
-import {UsersService} from "./bl/UsersService";
-import {EchoConnector} from "./bl/connectors/EchoConnector";
-import {LimaConnector} from "./bl/connectors/LimaConnector";
-import {LocationSender} from "./bl/LocationSender";
-import {UserInformationSender} from "./bl/UserInformationSender";
-import {WhiskeyConnector} from "./bl/connectors/WhiskeyConnector";
-import {UserDAL} from "./DAL/repositories/UserDAL";
+import {UsersService} from "./bl/services/usersService";
+import {NewsSeverityServiceConnector} from "./bl/connectors/newsServerityService.connector";
+import {WeatherAndCrowdedPlacesServiceConnector} from "./bl/connectors/weatherAndCrowdedPlacesServiceConnector";
+import {BodyStatsServiceConnector} from "./bl/connectors/bodyStatsService.connector";
+import {UsersRepository} from "./DAL/repositories/usersRepository";
+import {dateScalarType} from "./scalars/date.scalar";
+import {UserConditionService} from "./bl/services/userConditionService";
+import {UserDB} from "./DAL/types/user";
 
-import {OnesignalConnector} from "./bl/connectors/OnesignalConnector";
-import {SeverityCalculator} from "./bl/SeverityCalculator";
+const {ApolloServer} = require('apollo-server');
 
-const usersService = new UsersService(new UserDAL());
-const locationSender = new LocationSender(new EchoConnector(), new LimaConnector());
-const userInformationSender = new UserInformationSender(new WhiskeyConnector());
+const usersService = new UsersService(new UsersRepository());
+const statsService: UserConditionService = new UserConditionService(new NewsSeverityServiceConnector(), new WeatherAndCrowdedPlacesServiceConnector(), new BodyStatsServiceConnector(), usersService);
+
 
 const resolvers = {
+    Date: dateScalarType,
     Query: {
-        users: () => {
-            console.log(usersService.users);
-            return usersService.users;
-        },
         weatherPreferences: () => {
-            let limaConnector = new LimaConnector();
+            let limaConnector = new WeatherAndCrowdedPlacesServiceConnector();
             return limaConnector.getWeatherPreferences().then((response: any) => {
                 return response.data;
             }).catch((err) => {
@@ -34,44 +29,40 @@ const resolvers = {
             });
         },
         placesTypes: () => {
-            let limaConnector = new LimaConnector();
+            let limaConnector = new WeatherAndCrowdedPlacesServiceConnector();
             return limaConnector.getPlaceTypes().then(res => {
                 return res.data.places;
             }).catch(err => console.log(err.response));
+        },
+        userCondition: (root: any, {email}: { email: string }) => {
+            return usersService.getUserByEmail(email).then((user: UserDB | null) => {
+                if (!user) {
+                    throw new Error("No user found");
+                } else {
+                    return user.userCondition;
+                }
+            }).catch(err => {
+                throw new Error(err);
+            });
         }
     },
     Mutation: {
-        sendUserLocation: (root: any, {email, location, userOneSignalId}: {
-            email: string, location: GQLLocationInput,
-            userOneSignalId: string
+        sendUserLocation: (root: any, {email, location}: {
+            email: string, location: GQLLocationInput
         }) => {
-            usersService.getUserByEmail(email).then(userByEmail => {
-                if (!userByEmail) {
-                    throw new Error("user does not exist");
-                }
-                console.log(userByEmail);
-                locationSender.sendLocation(email, {
-                    lat: location.lat,
-                    long: location.long
-                }, userByEmail).then((placesSeverityResponse: any) => {
-                    userInformationSender.sendUserInformation(userByEmail);
-                    let severityObject = {placesSeverity: placesSeverityResponse.data};
-                    let severityCalculator = new SeverityCalculator();
-                    severityCalculator.calculateAndSendAlert(severityObject, userOneSignalId);
-                }).catch((err) => {
-                    throw new Error(err)
-                });
-
-            });
-            return true;
+            return usersService.updateUserLocation(email, location);
         },
         registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
+            console.log("saved user: " + JSON.stringify(user));
             return usersService.register(user);
         },
         login: (root: any, {email, password}: { email: string, password: string }) => {
             return usersService.login(email, password);
+        },
+        setUserInformation: (root: any, {email, userInfo}: { email: string, userInfo: GQLUserInformationInput }) => {
+            return usersService.setUserInformation(email, userInfo);
         }
-    }
+    },
 };
 
 const typeDefs = fs.readFileSync(path.join(__dirname, "schema.graphqls"), "utf8");
@@ -83,6 +74,7 @@ server.listen().then(({url}: { url: string }) => {
 });
 
 const scheduler = scheduleJob('*/5 * * * * *', function () {
-    // console.log('Sending Request');
+    console.log("scheduled task is running now");
+    statsService.calculateUsersCondition();
 });
 

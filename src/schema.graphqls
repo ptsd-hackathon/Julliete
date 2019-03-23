@@ -1,3 +1,18 @@
+scalar Date
+
+type Query {
+    weatherPreferences: WeatherPreferences
+    placesTypes: [PlaceInfo],
+    userCondition(email: String!): UserCondition
+}
+
+type Mutation{
+    sendUserLocation(email: String, location: LocationInput): Boolean
+    registerUser(user: UserRegistrationInput): Boolean
+    setUserInformation(email: String, userInfo: UserInformationInput): Boolean
+    login(email: String, password: String): Boolean
+}
+
 type User{
     id: String
     email: String
@@ -5,19 +20,22 @@ type User{
 }
 
 input UserRegistrationInput{
-    email: String
-    password: String
-    privateName: String
-    lastName: String
+    email: String!
+    password: String!
+    privateName: String!
+    lastName: String!
+    gender: String!
+    dateOfBirth: Date!
+    phoneNumber: String!
 }
 
 type UserInformation{
     privateName: String
     lastName: String
     gender: Gender
-    dateOfBirth: CustomDate
+    dateOfBirth: Date
     phoneNumber: String
-    initialPanicAttackDate: CustomDate
+    initialPanicAttackDate: Date
     sleep: SleepingHours
     emergencyContacts: [Contact]
     isShabbatKeeper: Boolean
@@ -30,13 +48,39 @@ type UserInformation{
     stressfullPlaces: [String]
 }
 
+type UserCondition{
+    weatherCondition: WeatherSeverityCondition
+    placesCondition: PlacesSeverityCondition
+    newsCondition: NewsSeverityCondition
+}
+
+type WeatherSeverityCondition{
+    currentWeatherType: String
+    severity: Int
+}
+
+type PlacesSeverityCondition{
+    currentPlaceType: String
+    severity: Int
+}
+
+type NewsSeverityCondition{
+    severeNewsArray: [NewsObject]
+}
+
+type NewsObject{
+    title: String!,
+    url: String!,
+    severity: Int!
+}
+
 input UserInformationInput{
     privateName: String
     lastName: String
     gender: Gender
-    dateOfBirth: CustomDateInput
+    dateOfBirth: Date
     phoneNumber: String
-    initialPanicAttackDate: CustomDateInput
+    initialPanicAttackDate: Date
     sleep: SleepingHoursInput
     emergencyContacts: [ContactInput]
     isShabbatKeeper: Boolean
@@ -56,10 +100,10 @@ input WeatherTriggerInput{
 }
 
 input AddressInput{
-    state: String
-    city: String
-    street: String
-    apartment: String
+    state: String!
+    city: String!
+    street: String!
+    apartment: String!
 }
 
 type Address{
@@ -111,20 +155,6 @@ input ContactInput{
     name: String
 }
 
-
-type CustomDate{
-    day: String
-    month: String
-    year: String
-}
-
-input CustomDateInput{
-    day: String
-    month: String
-    year: String
-}
-
-
 type SleepingHours{
     bedHour: Int
     wakingHour: Int
@@ -135,11 +165,6 @@ input SleepingHoursInput{
     wakingHour: String
 }
 
-type Query {
-    users: [User]
-    weatherPreferences: WeatherPreferences
-    placesTypes: [PlaceInfo]
-}
 
 type WeatherFamily{
     type: String,
@@ -164,12 +189,4 @@ type PlaceInfo{
 input LocationInput{
     lat: Float!
     long: Float!
-}
-
-type Mutation{
-    sendUserLocation(email: String, location: LocationInput, userOneSignalId: String): Boolean
-    registerUser(user: UserRegistrationInput): Boolean
-    setUserSettings(email: String, userInfo: UserInformationInput): Boolean
-    login(email: String, password: String): Boolean
-    triggerUsers(emails: [String], description: String): Boolean
 }

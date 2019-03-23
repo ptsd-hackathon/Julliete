@@ -1,10 +1,19 @@
-import axios from "axios";
-import {GQLWeatherTriggerInput} from "../../../graphql-types";
+import axios, {AxiosPromise} from "axios";
 
-export class LimaConnector {
+export interface WeatherCondition {
+    currentWeatherType: string,
+    severity: number
+}
+
+export interface PlacesCondition {
+    currentPlaceType: string,
+    severity: number
+}
+
+export class WeatherAndCrowdedPlacesServiceConnector {
     url: string = "http://129.213.103.20:3000";
 
-    getCrowdedPlaces(coords: { lat: number, long: number }, places: (string | null)[] | undefined) {
+    getCrowdedPlaces(coords: { lat: number, long: number }, places: (string | null)[] | undefined): AxiosPromise<PlacesCondition> {
         places = ["airport", "political"];
         let placesString = places ? places.join() : "";
         console.log(placesString);
@@ -20,7 +29,7 @@ export class LimaConnector {
         return axios.get(this.url + "/placesTypes");
     }
 
-    getWeathersSeverity(coords: { lat: number, long: number }, weatherTriggers: [GQLWeatherTriggerInput]) {
+    getWeathersSeverity(coords: { lat: number, long: number }, weatherTriggers: [{ type: string, rate: number }]): AxiosPromise<WeatherCondition> {
         weatherTriggers = [{type: "snow", rate: 5}];
         return axios.post(this.url + '/weathers', {coords: coords, weatherTriggers: weatherTriggers});
     }
