@@ -9,7 +9,7 @@ export class UsersRepository {
     }
 
     public findByLocationExpiryTime(currentTime: Date) {
-        return User.find({'expires': {$gte: currentTime}});
+        return User.find({'lastLocation.expires': {'$gte': new Date()}});
     }
 
     public findByEmail(email: string) {

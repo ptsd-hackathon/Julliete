@@ -5,8 +5,6 @@ import {scheduleJob} from "node-schedule";
 import {UsersService} from "./bl/services/usersService";
 import {NewsSeverityServiceConnector} from "./bl/connectors/newsServerityService.connector";
 import {WeatherAndCrowdedPlacesServiceConnector} from "./bl/connectors/weatherAndCrowdedPlacesServiceConnector";
-import {LocationSender} from "./bl/locationSender";
-import {UserInformationSender} from "./bl/UserInformationSender";
 import {BodyStatsServiceConnector} from "./bl/connectors/bodyStatsService.connector";
 import {UsersRepository} from "./DAL/repositories/usersRepository";
 import {dateScalarType} from "./scalars/date.scalar";
@@ -15,8 +13,6 @@ import {UserConditionService} from "./bl/services/userConditionService";
 const {ApolloServer} = require('apollo-server');
 
 const usersService = new UsersService(new UsersRepository());
-const locationSender = new LocationSender(new NewsSeverityServiceConnector(), new WeatherAndCrowdedPlacesServiceConnector());
-const userInformationSender = new UserInformationSender(new BodyStatsServiceConnector());
 const statsService: UserConditionService = new UserConditionService(new NewsSeverityServiceConnector(), new WeatherAndCrowdedPlacesServiceConnector(), new BodyStatsServiceConnector(), usersService);
 
 
@@ -46,25 +42,6 @@ const resolvers = {
         sendUserLocation: (root: any, {email, location}: {
             email: string, location: GQLLocationInput
         }) => {
-            // usersService.getUserByEmail(email).then((userByEmail: any) => {
-            //     if (!userByEmail) {
-            //         throw new Error("user does not exist");
-            //     }
-            //     console.log(userByEmail);
-            //     locationSender.sendLocation(email, {
-            //         lat: location.lat,
-            //         long: location.long
-            //     }, userByEmail).then((placesSeverityResponse: any) => {
-            //         userInformationSender.sendUserInformation(userByEmail);
-            //         let severityObject = {placesSeverity: placesSeverityResponse.data};
-            //         let severityCalculator = new SeverityCalculator();
-            //         severityCalculator.calculateAndSendAlert(severityObject, userOneSignalId);
-            //     }).catch((err) => {
-            //         throw new Error(err)
-            //     });
-            //
-            // });
-            // return true;
             return usersService.updateUserLocation(email, location);
         },
         registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
@@ -90,6 +67,6 @@ server.listen().then(({url}: { url: string }) => {
 
 const scheduler = scheduleJob('*/5 * * * * *', function () {
     console.log("scheduled task is running now");
-    statsService.calculateStats();
+    statsService.calculateUsersCondition();
 });
 

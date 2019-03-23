@@ -1,6 +1,7 @@
 import {GQLLocationInput, GQLUserInformationInput, GQLUserRegistrationInput} from "../../../graphql-types";
 import {UsersRepository} from "../../DAL/repositories/usersRepository";
 import {UserDB} from "../../DAL/types/user";
+import {UserCondition} from "./userConditionService";
 
 export class UsersService {
     // @ts-ignore
@@ -16,6 +17,11 @@ export class UsersService {
 
     getAllActiveLocationUsers() {
         return this.userDAL.findByLocationExpiryTime(new Date());
+    }
+
+    setUserCondition(user: UserDB, userCondition: UserCondition) {
+        user.userCondition = userCondition;
+        return this.userDAL.save(user);
     }
 
     updateUserLocation(email: string, location: GQLLocationInput) {

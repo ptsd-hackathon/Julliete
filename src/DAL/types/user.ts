@@ -1,5 +1,6 @@
 import * as mongoose from "mongoose";
 import {model, Schema} from "mongoose";
+import {UserCondition} from "../../bl/services/userConditionService";
 
 export interface UserDB extends mongoose.Document {
     email: string,
@@ -23,7 +24,8 @@ export interface UserDB extends mongoose.Document {
         stressFullPlaces?: [string],
         weatherTriggers?: [{ type: string, rate: number }]
     },
-    lastLocation?: { latitude: number, longitude: number, expires: Date }
+    lastLocation?: { latitude: number, longitude: number, expires: Date },
+    userCondition?: UserCondition
 }
 
 const UserSchema: Schema = new Schema({
@@ -48,7 +50,12 @@ const UserSchema: Schema = new Schema({
         stressFullPlaces: [String],
         weatherTriggers: [{type: String, rate: Number}]
     },
-    lastLocation: {latitude: Number, longitude: Number, expires: Date}
+    lastLocation: {latitude: Number, longitude: Number, expires: Date},
+    userCondition: {
+        weatherCondition: {currentWeatherType: String, severity: Number}
+        , placesCondition: {currentPlaceType: String, severity: Number}
+        , newsCondition: {severeNewsArray: [{title: String, url: String, severity: Number}]}
+    }
 });
 
 export const User = model<UserDB>("User", UserSchema);
