@@ -1,67 +1,56 @@
-import {GQLLocationInput, GQLUserInformationInput, GQLUserRegistrationInput} from "../graphql-types";
+import {GQLLocationInput, GQLMedicalStatsInput, GQLUserMetadataInput,} from "../graphql-types";
 import fs from "fs";
 import path from "path";
-import {scheduleJob} from "node-schedule";
-import {UsersService} from "./bl/services/usersService";
-import {NewsSeverityServiceConnector} from "./bl/connectors/newsServerityService.connector";
-import {WeatherAndCrowdedPlacesServiceConnector} from "./bl/connectors/weatherAndCrowdedPlacesServiceConnector";
-import {BodyStatsServiceConnector} from "./bl/connectors/bodyStatsService.connector";
-import {UsersRepository} from "./DAL/repositories/usersRepository";
 import {dateScalarType} from "./scalars/date.scalar";
-import {UserConditionService} from "./bl/services/userConditionService";
-import {UserDB} from "./DAL/types/user";
+import {DBConnection} from "./dal/dbConnection";
 
 const {ApolloServer} = require('apollo-server');
-
-const usersService = new UsersService(new UsersRepository());
-const statsService: UserConditionService = new UserConditionService(new NewsSeverityServiceConnector(), new WeatherAndCrowdedPlacesServiceConnector(), new BodyStatsServiceConnector(), usersService);
-
 
 const resolvers = {
     Date: dateScalarType,
     Query: {
-        weatherPreferences: () => {
-            let limaConnector = new WeatherAndCrowdedPlacesServiceConnector();
-            return limaConnector.getWeatherPreferences().then((response: any) => {
-                return response.data;
-            }).catch((err) => {
-                throw new Error(err);
-            });
-        },
-        placesTypes: () => {
-            let limaConnector = new WeatherAndCrowdedPlacesServiceConnector();
-            return limaConnector.getPlaceTypes().then(res => {
-                return res.data.places;
-            }).catch(err => console.log(err.response));
-        },
-        userCondition: (root: any, {email}: { email: string }) => {
-            return usersService.getUserByEmail(email).then((user: UserDB | null) => {
-                if (!user) {
-                    throw new Error("No user found");
-                } else {
-                    return user.userCondition;
-                }
-            }).catch(err => {
-                throw new Error(err);
-            });
-        }
+        a: () => "asdfasd"
     },
     Mutation: {
-        sendUserLocation: (root: any, {email, location}: {
-            email: string, location: GQLLocationInput
+        registerApp: (root: any, {appName, googleApiKey}: {
+            appName: string, googleApiKey: string
         }) => {
-            return usersService.updateUserLocation(email, location);
+            return true;
         },
-        registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
-            console.log("saved user: " + JSON.stringify(user));
-            return usersService.register(user);
+        registerUser: (root: any, {userEmail, appToken, userMetadata}:
+            { userEmail: string, appToken: string, userMetadata: GQLUserMetadataInput }) => {
+            return true;
         },
-        login: (root: any, {email, password}: { email: string, password: string }) => {
-            return usersService.login(email, password);
+        sendUserLocation: (root: any, {userEmail, location, appToken}: {
+            userEmail: string, location: GQLLocationInput, appToken: string
+        }) => {
+            return null;
         },
-        setUserInformation: (root: any, {email, userInfo}: { email: string, userInfo: GQLUserInformationInput }) => {
-            return usersService.setUserInformation(email, userInfo);
+        sendMedicalStats: (root: any, {userEmail, medicalStats, appToken}: {
+            userEmail: string, medicalStats: GQLMedicalStatsInput, appToken: string
+        }) => {
+            return true;
+        },
+        sendEvent: (root: any, {userEmail, location, medicalStats, eventDescription, appToken}: {
+            userEmail: string, location: GQLLocationInput, medicalStats: GQLMedicalStatsInput, eventDescription: string, appToken: string
+        }) => {
+            return true;
         }
+        // sendUserLocation: (root: any, {email, location}: {
+        //     email: string, location: GQLLocationInput
+        // }) => {
+        //     return usersService.updateUserLocation(email, location);
+        // },
+        // registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
+        //     console.log("saved user: " + JSON.stringify(user));
+        //     return usersService.register(user);
+        // },
+        // login: (root: any, {email, password}: { email: string, password: string }) => {
+        //     return usersService.login(email, password);
+        // },
+        // setUserInformation: (root: any, {email, userInfo}: { email: string, userInfo: GQLUserInformationInput }) => {
+        //     return usersService.setUserInformation(email, userInfo);
+        // }
     },
 };
 
@@ -70,11 +59,8 @@ const typeDefs = fs.readFileSync(path.join(__dirname, "schema.graphqls"), "utf8"
 const server = new ApolloServer({typeDefs, resolvers});
 
 server.listen().then(({url}: { url: string }) => {
+    let dbConnection = new DBConnection();
+    dbConnection.connect();
     console.log(`🚀  Server ready at ${url}`);
-});
-
-const scheduler = scheduleJob('*/5 * * * * *', function () {
-    console.log("scheduled task is running now");
-    statsService.calculateUsersCondition();
 });
 
