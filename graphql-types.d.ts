@@ -13,31 +13,31 @@ import {GraphQLResolveInfo, GraphQLScalarType} from 'graphql';
  *                             *
  *******************************/
 export interface GQLQuery {
-    a?: string;
+  a?: string;
 }
 
 export interface GQLMutation {
-    registerApp?: GQLAppToken;
+  registerApp?: GQLAppToken;
   registerUser?: boolean;
-    sendUserLocation?: GQLLocationInformation;
-    sendEvent?: boolean;
+  sendUserLocation?: GQLLocationInformation;
+  sendEvent?: boolean;
 }
 
 export interface GQLAppToken {
-    token?: string;
+  token?: string;
 }
 
 export interface GQLUserMetadataInput {
-    fullName?: string;
+  fullName?: string;
   gender?: GQLGender;
   dateOfBirth?: GQLDate;
-    address?: GQLAddressInput;
+  address?: GQLAddressInput;
   medicalInformation?: GQLMedicalInformationInput;
 }
 
 export enum GQLGender {
-    MALE = 'MALE',
-    FEMALE = 'FEMALE'
+  MALE = 'MALE',
+  FEMALE = 'FEMALE'
 }
 
 export type GQLDate = any;
@@ -50,24 +50,25 @@ export interface GQLAddressInput {
 }
 
 export interface GQLMedicalInformationInput {
-    blabla?: string;
+  blabla?: string;
 }
 
 export interface GQLLocationInput {
-    lat: number;
-    long: number;
+  lat: number;
+  long: number;
 }
 
 export interface GQLLocationInformation {
-    geocodedAddress?: string;
-    crowdednessLevel?: string;
-    pointsOfInterests?: Array<string | null>;
-    weather?: string;
+  geocodedAddress?: string;
+  crowdednessLevel?: string;
+  pointsOfInterests?: Array<string | null>;
+  weather?: string;
 }
 
 export enum GQLLogType {
-    STARTED = 'STARTED',
-    STOPPED = 'STOPPED'
+  STARTED = 'STARTED',
+  STOPPED = 'STOPPED',
+  REPEATABLE = 'REPEATABLE'
 }
 
 /*********************************
@@ -83,64 +84,64 @@ export enum GQLLogType {
 export interface GQLResolver {
   Query?: GQLQueryTypeResolver;
   Mutation?: GQLMutationTypeResolver;
-    AppToken?: GQLAppTokenTypeResolver;
-    Date?: GraphQLScalarType;
-    LocationInformation?: GQLLocationInformationTypeResolver;
+  AppToken?: GQLAppTokenTypeResolver;
+  Date?: GraphQLScalarType;
+  LocationInformation?: GQLLocationInformationTypeResolver;
 }
 export interface GQLQueryTypeResolver<TParent = any> {
-    a?: QueryToAResolver<TParent>;
+  a?: QueryToAResolver<TParent>;
 }
 
 export interface QueryToAResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface GQLMutationTypeResolver<TParent = any> {
-    registerApp?: MutationToRegisterAppResolver<TParent>;
-    registerUser?: MutationToRegisterUserResolver<TParent>;
-    sendUserLocation?: MutationToSendUserLocationResolver<TParent>;
-    sendEvent?: MutationToSendEventResolver<TParent>;
+  registerApp?: MutationToRegisterAppResolver<TParent>;
+  registerUser?: MutationToRegisterUserResolver<TParent>;
+  sendUserLocation?: MutationToSendUserLocationResolver<TParent>;
+  sendEvent?: MutationToSendEventResolver<TParent>;
 }
 
 export interface MutationToRegisterAppArgs {
-    appName?: string;
+  appName?: string;
 }
 export interface MutationToRegisterAppResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: MutationToRegisterAppArgs, context: any, info: GraphQLResolveInfo): TResult;
+  (parent: TParent, args: MutationToRegisterAppArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface MutationToRegisterUserArgs {
-    userEmail?: string;
-    appToken?: string;
-    clockSerial?: string;
-    userMetadata?: GQLUserMetadataInput;
+  userEmail?: string;
+  appToken?: string;
+  clockSerial?: string;
+  userMetadata?: GQLUserMetadataInput;
 }
 export interface MutationToRegisterUserResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: MutationToRegisterUserArgs, context: any, info: GraphQLResolveInfo): TResult;
+  (parent: TParent, args: MutationToRegisterUserArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface MutationToSendUserLocationArgs {
-    userEmail?: string;
-    appToken?: string;
-    location?: GQLLocationInput;
+  userEmail?: string;
+  appToken?: string;
+  location?: GQLLocationInput;
 }
 export interface MutationToSendUserLocationResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: MutationToSendUserLocationArgs, context: any, info: GraphQLResolveInfo): TResult;
+  (parent: TParent, args: MutationToSendUserLocationArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface MutationToSendEventArgs {
-    userEmail?: string;
-    appToken?: string;
-    location?: GQLLocationInput;
-    eventDescription?: string;
-    logType?: GQLLogType;
+  userEmail?: string;
+  appToken?: string;
+  location?: GQLLocationInput;
+  eventDescription?: string;
+  logType?: GQLLogType;
 }
 export interface MutationToSendEventResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: MutationToSendEventArgs, context: any, info: GraphQLResolveInfo): TResult;
+  (parent: TParent, args: MutationToSendEventArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface GQLAppTokenTypeResolver<TParent = any> {
-    token?: AppTokenToTokenResolver<TParent>;
+  token?: AppTokenToTokenResolver<TParent>;
 }
 
 export interface AppTokenToTokenResolver<TParent = any, TResult = any> {
@@ -148,10 +149,10 @@ export interface AppTokenToTokenResolver<TParent = any, TResult = any> {
 }
 
 export interface GQLLocationInformationTypeResolver<TParent = any> {
-    geocodedAddress?: LocationInformationToGeocodedAddressResolver<TParent>;
-    crowdednessLevel?: LocationInformationToCrowdednessLevelResolver<TParent>;
-    pointsOfInterests?: LocationInformationToPointsOfInterestsResolver<TParent>;
-    weather?: LocationInformationToWeatherResolver<TParent>;
+  geocodedAddress?: LocationInformationToGeocodedAddressResolver<TParent>;
+  crowdednessLevel?: LocationInformationToCrowdednessLevelResolver<TParent>;
+  pointsOfInterests?: LocationInformationToPointsOfInterestsResolver<TParent>;
+  weather?: LocationInformationToWeatherResolver<TParent>;
 }
 
 export interface LocationInformationToGeocodedAddressResolver<TParent = any, TResult = any> {
