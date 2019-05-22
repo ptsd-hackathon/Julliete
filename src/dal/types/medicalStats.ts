@@ -11,14 +11,13 @@ export interface MedicalStatsDB extends mongoose.Document {
     cardiacIndex: number,
     heartbeatRateVariance: number,
     heartbeatRate: number,
-    MAPrs: number,
     svr: number,
     cardiacOutput: number,
-    battery: number,
     diastolicBloodPressure: number,
     temperature: number,
     sweat: number,
-    calories: number
+    calories: number,
+    timestamp: number
 }
 
 const MedicalStatsSchema: Schema = new Schema({
@@ -31,14 +30,13 @@ const MedicalStatsSchema: Schema = new Schema({
     cardiacIndex: Number,
     heartbeatRateVariance: Number,
     heartbeatRate: Number,
-    MAPrs: Number,
     svr: Number,
     cardiacOutput: Number,
-    battery: Number,
     diastolicBloodPressure: Number,
     temperature: Number,
     sweat: Number,
-    calories: Number
+    calories: Number,
+    timestamp: Number
 });
 
 export const MedicalStats = model<MedicalStatsDB>("MedicalStats", MedicalStatsSchema);

@@ -9,15 +9,15 @@ export interface EventDB extends mongoose.Document {
     logType: string,
     location: {
         coordinates: {
-            lat: number,
-            long: number
+            lat: number | null,
+            long: number | null
         },
-        weather: {temperature: string, description:string},
-        geocodedAddress: string,
-        crowdednessLevel: number,
-        pointsOfInterests: Array<string>,
-    }
-    medicalStats: MedicalStatsDB[],
+        weather: {temperature: string, description:string} | null,
+        geocodedAddress: string | null,
+        crowdednessLevel: number | null,
+        pointsOfInterests: Array<string> | null,
+    } | null,
+    medicalStats: MedicalStatsDB[] | null,
     timestamp: Date
 }
 

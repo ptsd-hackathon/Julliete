@@ -1,11 +1,12 @@
 import {EventsRepository} from "../../dal/repositories/eventsRepository";
 import {EventDB} from "../../dal/types/event";
 import {UsersRepository} from "../../dal/repositories/usersRepository";
+import { MedicalStatsDB } from "../../dal/types/medicalStats";
 import {GQLCoordinates, GQLWeather} from "../../../graphql-types";
 
 export class EventsService {
     public async addNewEvent(userEmail: string, appToken: string, logType: string,
-                             eventDescription: string, location: { lat: number, long: number }, locationData: LocationData) {
+                             eventDescription: string, location?: { lat: number, long: number }, mediacalStats?: MedicalStatsDB[], locationData?: LocationData) {
         await this.validateUserAndApp(userEmail, appToken);
         let eventsRepository = new EventsRepository();
         // @ts-ignore
@@ -16,15 +17,16 @@ export class EventsService {
             eventDescription: eventDescription,
             location: {
                 coordinates: {
-                    lat: location.lat,
-                    long: location.long
+                    lat: location == undefined ? null : location.lat,
+                    long: location == undefined ? null : location.long
                 },
-                crowdednessLevel: locationData.crowdedness,
-                pointsOfInterests: locationData.pointsOfInterest,
-                geocodedAddress: locationData.address,
-                weather: locationData.weather
+                crowdednessLevel: locationData == undefined ? null : locationData.crowdedness,
+                pointsOfInterests: locationData == undefined ? null : locationData.pointsOfInterest,
+                geocodedAddress: locationData == undefined ? null : locationData.address,
+                weather: locationData == undefined ? null : locationData.weather
             },
-            timestamp: new Date()
+            timestamp: new Date(),
+            medicalStats: mediacalStats == undefined ? null : mediacalStats
         };
 
         try {
