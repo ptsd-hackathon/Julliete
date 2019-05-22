@@ -29,13 +29,13 @@ export interface BiobeatMeasurmentsResponse {
 
 export class BiobeatWatchService {
 
-    private GetTokenUrl = `https://biobeatlogin.auth.eu-west-1.amazoncognito.com/oauth2/token?grant_type=client_credentials&scope=com.heroes/post`;
-    private TokenAuth = "Basic N2xpM2tvOGhqYXV2MWk1bTByMjBnMGVhMDM6Y3EycHNmbGJlY3Y4ZXI4ajdsNG9yNGVucGJlNmxiNWRtYTkwZWhyOGdkaTJpcjIyMnNm";
+    private getTokenUrl = `https://biobeatlogin.auth.eu-west-1.amazoncognito.com/oauth2/token?grant_type=client_credentials&scope=com.heroes/post`;
+    private tokenAuth = "Basic N2xpM2tvOGhqYXV2MWk1bTByMjBnMGVhMDM6Y3EycHNmbGJlY3Y4ZXI4ajdsNG9yNGVucGJlNmxiNWRtYTkwZWhyOGdkaTJpcjIyMnNm";
     
     constructor() {}
 
-    getMeasurement(patch_id: string, timestampstart:string, timestampend:string): AxiosPromise<BiobeatMeasurmentsResponse[]> {
-        let getMeasurementsUrl = `https://nkxjoc59ab.execute-api.eu-west-1.amazonaws.com/test/heroes-get-measurement?patch_id=${patch_id}&timestampstart=${timestampstart}&timestampend=${timestampend}`;
+    getMeasurement(patch_id: string, timeStampStart:string, timeStampEnd:string): AxiosPromise<BiobeatMeasurmentsResponse[]> {
+        let getMeasurementsUrl = `https://nkxjoc59ab.execute-api.eu-west-1.amazonaws.com/test/heroes-get-measurement?patch_id=${patch_id}&timestampstart=${timeStampStart}&timestampend=${timeStampEnd}`;
         let biobeatToken: BiobeatTokenReponse;
 
         return this.getToken().then(res => {
@@ -46,10 +46,10 @@ export class BiobeatWatchService {
         });
     }
 
-    getToken(): AxiosPromise<BiobeatTokenReponse> {
-        return axios.post(this.GetTokenUrl, { headers: {
+    private getToken(): AxiosPromise<BiobeatTokenReponse> {
+        return axios.post(this.getTokenUrl, { headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': this.TokenAuth
+            'Authorization': this.tokenAuth
         }});
     }
 }
