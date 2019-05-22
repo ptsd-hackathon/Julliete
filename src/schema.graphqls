@@ -1,7 +1,7 @@
 scalar Date
 
 type Query {
-    a: String
+    getUserEvents(userEmail: String, appToken: String, fromDate: Date, toDate: Date): [UserEvent]
 }
 
 type Mutation{
@@ -9,6 +9,36 @@ type Mutation{
     registerUser(userEmail: String, appToken: String, clockSerial: String, userMetadata: UserMetadataInput): Boolean
     sendUserLocation(userEmail: String, appToken: String, location: LocationInput): LocationInformation
     sendEvent(userEmail: String, appToken: String, location: LocationInput, eventDescription: String, logType: LogType): Boolean
+}
+
+type UserEvent{
+    userEmail: String
+    appToken: String
+    eventDescription: String
+    logType: String
+    location: LocationInformation
+    medicalStats: [MedicalStats]
+    timestamp: Date
+}
+
+type MedicalStats{
+    breathRate: Int
+    protocolNumber: Int
+    systolicBloodPressure: Int
+    strokeVolume: Int
+    spo2: Int,
+    movement: Int
+    cardiacIndex: Int
+    heartbeatRateVariance: Int
+    heartbeatRate: Int
+    MAPrs: Int
+    svr: Int
+    cardiacOutput: Int
+    battery: Int
+    diastolicBloodPressure: Int
+    temperature: Int
+    sweat: Int
+    caloris: Int
 }
 
 enum LogType{
@@ -21,7 +51,8 @@ type LocationInformation{
     geocodedAddress: String,
     crowdednessLevel: String,
     pointsOfInterests: [String],
-    weather: String
+    weather: String,
+    coordinates: Coordinates
 }
 
 type AppToken{
@@ -55,4 +86,9 @@ enum Gender{
 input LocationInput{
     lat: Float!
     long: Float!
+}
+
+type Coordinates{
+    lat: Float
+    long: Float
 }

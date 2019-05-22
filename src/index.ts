@@ -8,13 +8,14 @@ import {registerUser} from "./bl/resolvers/registerUser.resolver";
 import {sendEvent} from "./bl/resolvers/sendEvent.resolver";
 import {scheduleJob} from "node-schedule";
 import {ClockIntegratorScheduler} from "./bl/schedulers/clockIntegrator.scheduler";
+import {userEvents} from "./bl/resolvers/userEvents.resolver";
 
 const {ApolloServer} = require('apollo-server');
 
 const resolvers = {
     Date: dateScalarType,
     Query: {
-        a: () => "asdfasd"
+        getUserEvents: userEvents
     },
     Mutation: {
         registerApp: registerApp,
