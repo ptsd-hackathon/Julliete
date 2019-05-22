@@ -3,6 +3,7 @@ import {model, Schema} from "mongoose";
 
 export interface EventDB extends mongoose.Document {
     userEmail: string,
+    appToken: string,
     eventDescription: string,
     logType: string,
     location: {
@@ -10,18 +11,18 @@ export interface EventDB extends mongoose.Document {
             latitude: number,
             longitude: number
         },
-        weather: any,
-        geocodedLocation: any,
-        crowdedness: any,
-        pointsOfInterests: any[],
+        weather: any | null,
+        geocodedLocation: any | null,
+        crowdedness: any | null,
+        pointsOfInterests: any[] | null,
     }
     medicalStats: any,
-    description: string,
     timestamp: Date
 }
 
 const EventSchema: Schema = new Schema({
     userEmail: String,
+    appToken: String,
     eventDescription: String,
     logType: String,
     location: {
