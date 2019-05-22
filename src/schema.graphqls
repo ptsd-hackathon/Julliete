@@ -7,8 +7,8 @@ type Query {
 type Mutation{
     registerApp(appName: String): AppToken
     registerUser(userEmail: String, appToken: String, clockSerial: String, userMetadata: UserMetadataInput): Boolean
-    sendUserLocation(userEmail: String, appToken: String, language:String, location: LocationInput): LocationInformation
-    sendEvent(userEmail: String, appToken: String, location: LocationInput, eventDescription: String, logType: LogType): Boolean
+    sendUserLocation(userEmail: String, appToken: String, language:String, locationCoordinates: LocationInput): LocationInformation
+    sendEvent(userEmail: String, appToken: String, language:String, location: LocationInput, eventDescription: String, logType: LogType): Boolean
 }
 
 type UserEvent{

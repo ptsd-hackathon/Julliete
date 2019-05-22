@@ -2,21 +2,19 @@ import {GQLLocationInformation, GQLLocationInput} from "../../../graphql-types";
 import {EventsService} from "../services/events.service";
 import {LocationInformation} from "../services/location/locationLogic/location-information";
 
-export async function sendUserLocation(root: any, {userEmail, appToken,language, location}: {
-    userEmail: string, appToken: string, language: string, location: GQLLocationInput
+export async function sendUserLocation(root: any, {userEmail, appToken, language, locationCoordinates}: {
+    userEmail: string, appToken: string, language: string, locationCoordinates: GQLLocationInput
 }): Promise<GQLLocationInformation> {
     let eventsService = new EventsService();
-    let apikey = 'AIzaSyAxm42yuheNNx0znh7x4qAExlu5MMsnpPY';
-    let radius = 100;
-    let locationData = await LocationInformation.getLocationData(apikey, location.lat, location.long, language, radius);
+    let locationData = await LocationInformation.getLocationData(locationCoordinates.lat, locationCoordinates.long, language);
     console.log("Saved new event");
     await eventsService.addNewEvent(userEmail, appToken, "REPEATABLE", "Standard Location Input",
-        location, locationData);
+        locationCoordinates, locationData);
     return await {
         crowdednessLevel: locationData.crowdedness,
         geocodedAddress: locationData.address,
         pointsOfInterests: locationData.pointsOfInterest,
         weather: locationData.weather,
-        coordinates: location
+        coordinates: locationCoordinates
     };
 }

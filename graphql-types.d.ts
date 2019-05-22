@@ -354,7 +354,7 @@ export interface MutationToSendUserLocationArgs {
   userEmail?: string;
   appToken?: string;
   language?: string;
-  location?: GQLLocationInput;
+  locationCoordinates?: GQLLocationInput;
 }
 export interface MutationToSendUserLocationResolver<TParent = any, TResult = any> {
   (parent: TParent, args: MutationToSendUserLocationArgs, context: any, info: GraphQLResolveInfo): TResult;
@@ -363,6 +363,7 @@ export interface MutationToSendUserLocationResolver<TParent = any, TResult = any
 export interface MutationToSendEventArgs {
   userEmail?: string;
   appToken?: string;
+  language?: string;
   location?: GQLLocationInput;
   eventDescription?: string;
   logType?: GQLLogType;
