@@ -1,7 +1,8 @@
 import {UsersRepository} from "../../dal/repositories/usersRepository";
 import { BiobeatWatchService, BiobeatMeasurmentsResponse } from "../services/biobeatWatchService";
-import { MedicalStats, MedicalStatsDB } from "../../dal/types/medicalStats";
+import { MedicalStatsDB } from "../../dal/types/medicalStats";
 import { EventsService } from "../services/events.service";
+const moment = require('moment'); 
 
 export class ClockIntegratorScheduler {
     private usersRepository: UsersRepository;
@@ -19,7 +20,11 @@ export class ClockIntegratorScheduler {
            await users.forEach(user => {
                 if (user.clockSerial) {
                     let biobeatWatchMeasurements: BiobeatMeasurmentsResponse[];
-                    this.biobeatWatchService.getMeasurement(user.clockSerial,'', '').then(biobeatWatchMeasurementsResponse => {
+                    let endDate = new Date();
+                    let startDate = new Date(endDate.getMilliseconds() - 1800000);
+                    let timeStampStart = moment(startDate).format('yyMMddhhmmss').toString();
+                    let timeStampEnd = moment(endDate).format('yyMMddhhmmss').toString();
+                    this.biobeatWatchService.getMeasurement(user.clockSerial, timeStampStart, timeStampEnd).then(biobeatWatchMeasurementsResponse => {
                         biobeatWatchMeasurements = biobeatWatchMeasurementsResponse.data;
                         let mappedBiobeatWatchMeasurments = this.mapBiobeatMedicalStats(biobeatWatchMeasurements)
                         eventsService.addNewEvent(user.email, user.appToken, "REPEATABLE", "Biobeat Watch Medical Stats",
