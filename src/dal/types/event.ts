@@ -1,5 +1,6 @@
 import * as mongoose from "mongoose";
 import {model, Schema} from "mongoose";
+import {MedicalStatsDB, MedicalStatsSchemaConst} from "./medicalStats";
 
 export interface EventDB extends mongoose.Document {
     userEmail: string,
@@ -16,7 +17,7 @@ export interface EventDB extends mongoose.Document {
         crowdedness: number,
         pointsOfInterests: Array<string>,
     }
-    medicalStats: any,
+    medicalStats: MedicalStatsDB[],
     timestamp: Date
 }
 
@@ -35,7 +36,7 @@ const EventSchema: Schema = new Schema({
         crowdedness: Schema.Types.Mixed,
         pointsOfInterests: [Schema.Types.Mixed],
     },
-    medicalStats: Schema.Types.Mixed,
+    medicalStats: [MedicalStatsSchemaConst],
     description: String,
     timestamp: Date
 });

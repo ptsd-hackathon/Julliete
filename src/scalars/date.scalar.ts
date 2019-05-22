@@ -5,7 +5,6 @@ export const dateScalarType = new GraphQLScalarType({
     description: "Date scalar",
     serialize(value) {
         console.log(value + "a");
-
         return value.getTime();
     },
     parseValue(value) {
@@ -19,5 +18,4 @@ export const dateScalarType = new GraphQLScalarType({
         }
         return null;
     }
-
 });

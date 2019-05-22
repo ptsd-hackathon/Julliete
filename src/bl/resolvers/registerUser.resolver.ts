@@ -21,6 +21,7 @@ export async function registerUser(root: any, {userEmail, appToken, clockSerial,
     let userDB: UserDB = {
         email: userEmail,
         appToken: appToken,
+        clockSerial: clockSerial,
         metadata: {
             fullName: userMetadata.fullName,
             gender: userMetadata.gender,

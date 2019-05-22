@@ -12,7 +12,57 @@ import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
  *                             *
  *******************************/
 export interface GQLQuery {
-  a?: string;
+  getUserEvents?: Array<GQLUserEvent | null>;
+}
+
+export type GQLDateTime = any;
+
+export interface GQLUserEvent {
+  userEmail?: string;
+  appToken?: string;
+  eventDescription?: string;
+  logType?: string;
+  location?: GQLLocationInformation;
+  medicalStats?: Array<GQLMedicalStats | null>;
+  timestamp?: GQLDateTime;
+}
+
+export interface GQLLocationInformation {
+  geocodedAddress?: string;
+  crowdednessLevel?: number;
+  pointsOfInterests?: Array<string | null>;
+  weather?: GQLWeather;
+  coordinates?: GQLCoordinates;
+}
+
+export interface GQLWeather {
+  description?: string;
+  temperature?: string;
+}
+
+export interface GQLCoordinates {
+  lat?: number;
+  long?: number;
+}
+
+export interface GQLMedicalStats {
+  breathRate?: number;
+  protocolNumber?: number;
+  systolicBloodPressure?: number;
+  strokeVolume?: number;
+  spo2?: number;
+  movement?: number;
+  cardiacIndex?: number;
+  heartbeatRateVariance?: number;
+  heartbeatRate?: number;
+  MAPrs?: number;
+  svr?: number;
+  cardiacOutput?: number;
+  battery?: number;
+  diastolicBloodPressure?: number;
+  temperature?: number;
+  sweat?: number;
+  caloris?: number;
 }
 
 export interface GQLMutation {
@@ -29,7 +79,7 @@ export interface GQLAppToken {
 export interface GQLUserMetadataInput {
   fullName?: string;
   gender?: GQLGender;
-  dateOfBirth?: GQLDate;
+  dateOfBirth?: GQLDateTime;
   address?: GQLAddressInput;
   medicalInformation?: GQLMedicalInformationInput;
 }
@@ -38,8 +88,6 @@ export enum GQLGender {
   MALE = 'MALE',
   FEMALE = 'FEMALE'
 }
-
-export type GQLDate = any;
 
 export interface GQLAddressInput {
   state: string;
@@ -57,27 +105,10 @@ export interface GQLLocationInput {
   long: number;
 }
 
-export interface GQLLocationInformation {
-  geocodedAddress?: string;
-  crowdednessLevel?: number;
-  pointsOfInterests?: Array<string | null>;
-  weather?: GQLWeather;
-}
-
-export interface GQLWeather {
-  description?: string;
-  temperature?: string;
-}
-
 export enum GQLLogType {
   STARTED = 'STARTED',
   STOPPED = 'STOPPED',
   REPEATABLE = 'REPEATABLE'
-}
-
-export interface GQLLocation {
-  lat: number;
-  long: number;
 }
 
 /*********************************
@@ -92,18 +123,206 @@ export interface GQLLocation {
  */
 export interface GQLResolver {
   Query?: GQLQueryTypeResolver;
-  Mutation?: GQLMutationTypeResolver;
-  AppToken?: GQLAppTokenTypeResolver;
-  Date?: GraphQLScalarType;
+  DateTime?: GraphQLScalarType;
+  UserEvent?: GQLUserEventTypeResolver;
   LocationInformation?: GQLLocationInformationTypeResolver;
   Weather?: GQLWeatherTypeResolver;
-  Location?: GQLLocationTypeResolver;
+  Coordinates?: GQLCoordinatesTypeResolver;
+  MedicalStats?: GQLMedicalStatsTypeResolver;
+  Mutation?: GQLMutationTypeResolver;
+  AppToken?: GQLAppTokenTypeResolver;
 }
 export interface GQLQueryTypeResolver<TParent = any> {
-  a?: QueryToAResolver<TParent>;
+  getUserEvents?: QueryToGetUserEventsResolver<TParent>;
 }
 
-export interface QueryToAResolver<TParent = any, TResult = any> {
+export interface QueryToGetUserEventsArgs {
+  userEmail?: string;
+  appToken?: string;
+  fromDate?: GQLDateTime;
+  toDate?: GQLDateTime;
+}
+export interface QueryToGetUserEventsResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: QueryToGetUserEventsArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLUserEventTypeResolver<TParent = any> {
+  userEmail?: UserEventToUserEmailResolver<TParent>;
+  appToken?: UserEventToAppTokenResolver<TParent>;
+  eventDescription?: UserEventToEventDescriptionResolver<TParent>;
+  logType?: UserEventToLogTypeResolver<TParent>;
+  location?: UserEventToLocationResolver<TParent>;
+  medicalStats?: UserEventToMedicalStatsResolver<TParent>;
+  timestamp?: UserEventToTimestampResolver<TParent>;
+}
+
+export interface UserEventToUserEmailResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserEventToAppTokenResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserEventToEventDescriptionResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserEventToLogTypeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserEventToLocationResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserEventToMedicalStatsResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UserEventToTimestampResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLLocationInformationTypeResolver<TParent = any> {
+  geocodedAddress?: LocationInformationToGeocodedAddressResolver<TParent>;
+  crowdednessLevel?: LocationInformationToCrowdednessLevelResolver<TParent>;
+  pointsOfInterests?: LocationInformationToPointsOfInterestsResolver<TParent>;
+  weather?: LocationInformationToWeatherResolver<TParent>;
+  coordinates?: LocationInformationToCoordinatesResolver<TParent>;
+}
+
+export interface LocationInformationToGeocodedAddressResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface LocationInformationToCrowdednessLevelResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface LocationInformationToPointsOfInterestsResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface LocationInformationToWeatherResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface LocationInformationToCoordinatesResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLWeatherTypeResolver<TParent = any> {
+  description?: WeatherToDescriptionResolver<TParent>;
+  temperature?: WeatherToTemperatureResolver<TParent>;
+}
+
+export interface WeatherToDescriptionResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface WeatherToTemperatureResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLCoordinatesTypeResolver<TParent = any> {
+  lat?: CoordinatesToLatResolver<TParent>;
+  long?: CoordinatesToLongResolver<TParent>;
+}
+
+export interface CoordinatesToLatResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface CoordinatesToLongResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLMedicalStatsTypeResolver<TParent = any> {
+  breathRate?: MedicalStatsToBreathRateResolver<TParent>;
+  protocolNumber?: MedicalStatsToProtocolNumberResolver<TParent>;
+  systolicBloodPressure?: MedicalStatsToSystolicBloodPressureResolver<TParent>;
+  strokeVolume?: MedicalStatsToStrokeVolumeResolver<TParent>;
+  spo2?: MedicalStatsToSpo2Resolver<TParent>;
+  movement?: MedicalStatsToMovementResolver<TParent>;
+  cardiacIndex?: MedicalStatsToCardiacIndexResolver<TParent>;
+  heartbeatRateVariance?: MedicalStatsToHeartbeatRateVarianceResolver<TParent>;
+  heartbeatRate?: MedicalStatsToHeartbeatRateResolver<TParent>;
+  MAPrs?: MedicalStatsToMAPrsResolver<TParent>;
+  svr?: MedicalStatsToSvrResolver<TParent>;
+  cardiacOutput?: MedicalStatsToCardiacOutputResolver<TParent>;
+  battery?: MedicalStatsToBatteryResolver<TParent>;
+  diastolicBloodPressure?: MedicalStatsToDiastolicBloodPressureResolver<TParent>;
+  temperature?: MedicalStatsToTemperatureResolver<TParent>;
+  sweat?: MedicalStatsToSweatResolver<TParent>;
+  caloris?: MedicalStatsToCalorisResolver<TParent>;
+}
+
+export interface MedicalStatsToBreathRateResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToProtocolNumberResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToSystolicBloodPressureResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToStrokeVolumeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToSpo2Resolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToMovementResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToCardiacIndexResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToHeartbeatRateVarianceResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToHeartbeatRateResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToMAPrsResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToSvrResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToCardiacOutputResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToBatteryResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToDiastolicBloodPressureResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToTemperatureResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToSweatResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MedicalStatsToCalorisResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -157,54 +376,5 @@ export interface GQLAppTokenTypeResolver<TParent = any> {
 }
 
 export interface AppTokenToTokenResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLLocationInformationTypeResolver<TParent = any> {
-  geocodedAddress?: LocationInformationToGeocodedAddressResolver<TParent>;
-  crowdednessLevel?: LocationInformationToCrowdednessLevelResolver<TParent>;
-  pointsOfInterests?: LocationInformationToPointsOfInterestsResolver<TParent>;
-  weather?: LocationInformationToWeatherResolver<TParent>;
-}
-
-export interface LocationInformationToGeocodedAddressResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface LocationInformationToCrowdednessLevelResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface LocationInformationToPointsOfInterestsResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface LocationInformationToWeatherResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLWeatherTypeResolver<TParent = any> {
-  description?: WeatherToDescriptionResolver<TParent>;
-  temperature?: WeatherToTemperatureResolver<TParent>;
-}
-
-export interface WeatherToDescriptionResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface WeatherToTemperatureResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface GQLLocationTypeResolver<TParent = any> {
-  lat?: LocationToLatResolver<TParent>;
-  long?: LocationToLongResolver<TParent>;
-}
-
-export interface LocationToLatResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface LocationToLongResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
