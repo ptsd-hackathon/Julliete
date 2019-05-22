@@ -13,7 +13,8 @@ type Mutation{
 
 enum LogType{
     STARTED,
-    STOPPED
+    STOPPED,
+    REPEATABLE
 }
 
 type LocationInformation{
