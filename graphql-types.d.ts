@@ -20,7 +20,6 @@ export interface GQLMutation {
     registerApp?: GQLAppToken;
   registerUser?: boolean;
     sendUserLocation?: GQLLocationInformation;
-    sendMedicalStats?: boolean;
     sendEvent?: boolean;
 }
 
@@ -66,8 +65,9 @@ export interface GQLLocationInformation {
     weather?: string;
 }
 
-export interface GQLMedicalStatsInput {
-    bbb?: string;
+export enum GQLLogType {
+    STARTED = 'STARTED',
+    STOPPED = 'STOPPED'
 }
 
 /*********************************
@@ -99,15 +99,12 @@ export interface GQLMutationTypeResolver<TParent = any> {
     registerApp?: MutationToRegisterAppResolver<TParent>;
     registerUser?: MutationToRegisterUserResolver<TParent>;
     sendUserLocation?: MutationToSendUserLocationResolver<TParent>;
-    sendMedicalStats?: MutationToSendMedicalStatsResolver<TParent>;
     sendEvent?: MutationToSendEventResolver<TParent>;
 }
 
 export interface MutationToRegisterAppArgs {
     appName?: string;
-    googleApiKey?: string;
 }
-
 export interface MutationToRegisterAppResolver<TParent = any, TResult = any> {
     (parent: TParent, args: MutationToRegisterAppArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
@@ -115,40 +112,29 @@ export interface MutationToRegisterAppResolver<TParent = any, TResult = any> {
 export interface MutationToRegisterUserArgs {
     userEmail?: string;
     appToken?: string;
+    clockSerial?: string;
     userMetadata?: GQLUserMetadataInput;
 }
-
 export interface MutationToRegisterUserResolver<TParent = any, TResult = any> {
     (parent: TParent, args: MutationToRegisterUserArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface MutationToSendUserLocationArgs {
     userEmail?: string;
-    location?: GQLLocationInput;
     appToken?: string;
+    location?: GQLLocationInput;
 }
 export interface MutationToSendUserLocationResolver<TParent = any, TResult = any> {
     (parent: TParent, args: MutationToSendUserLocationArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface MutationToSendMedicalStatsArgs {
-    userEmail?: string;
-    medicalStats?: GQLMedicalStatsInput;
-    appToken?: string;
-}
-
-export interface MutationToSendMedicalStatsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: MutationToSendMedicalStatsArgs, context: any, info: GraphQLResolveInfo): TResult;
-}
-
 export interface MutationToSendEventArgs {
     userEmail?: string;
-    location?: GQLLocationInput;
-    medicalStats?: GQLMedicalStatsInput;
-    eventDescription?: string;
     appToken?: string;
+    location?: GQLLocationInput;
+    eventDescription?: string;
+    logType?: GQLLogType;
 }
-
 export interface MutationToSendEventResolver<TParent = any, TResult = any> {
     (parent: TParent, args: MutationToSendEventArgs, context: any, info: GraphQLResolveInfo): TResult;
 }

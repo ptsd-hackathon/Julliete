@@ -5,11 +5,15 @@ type Query {
 }
 
 type Mutation{
-    registerApp(appName: String, googleApiKey: String): AppToken
-    registerUser(userEmail: String, appToken: String, userMetadata: UserMetadataInput): Boolean
-    sendUserLocation(userEmail: String, location: LocationInput, appToken: String): LocationInformation
-    sendMedicalStats(userEmail: String, medicalStats: MedicalStatsInput, appToken: String): Boolean
-    sendEvent(userEmail: String, location: LocationInput, medicalStats: MedicalStatsInput, eventDescription: String, appToken: String): Boolean
+    registerApp(appName: String): AppToken
+    registerUser(userEmail: String, appToken: String, clockSerial: String, userMetadata: UserMetadataInput): Boolean
+    sendUserLocation(userEmail: String, appToken: String, location: LocationInput): LocationInformation
+    sendEvent(userEmail: String, appToken: String, location: LocationInput, eventDescription: String, logType: LogType): Boolean
+}
+
+enum LogType{
+    STARTED,
+    STOPPED
 }
 
 type LocationInformation{
@@ -21,10 +25,6 @@ type LocationInformation{
 
 type AppToken{
     token: String
-}
-
-input MedicalStatsInput{
-    bbb: String
 }
 
 input UserMetadataInput{

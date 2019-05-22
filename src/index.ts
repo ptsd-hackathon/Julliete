@@ -1,8 +1,11 @@
-import {GQLLocationInput, GQLMedicalStatsInput, GQLUserMetadataInput,} from "../graphql-types";
 import fs from "fs";
 import path from "path";
 import {dateScalarType} from "./scalars/date.scalar";
 import {DBConnection} from "./dal/dbConnection";
+import {registerApp} from "./bl/resolvers/registerApp.resolver";
+import {sendUserLocation} from "./bl/resolvers/sendUserLocation.resolver";
+import {registerUser} from "./bl/resolvers/registerUser.resolver";
+import {sendEvent} from "./bl/resolvers/sendEvent.resolver";
 
 const {ApolloServer} = require('apollo-server');
 
@@ -12,45 +15,10 @@ const resolvers = {
         a: () => "asdfasd"
     },
     Mutation: {
-        registerApp: (root: any, {appName, googleApiKey}: {
-            appName: string, googleApiKey: string
-        }) => {
-            return true;
-        },
-        registerUser: (root: any, {userEmail, appToken, userMetadata}:
-            { userEmail: string, appToken: string, userMetadata: GQLUserMetadataInput }) => {
-            return true;
-        },
-        sendUserLocation: (root: any, {userEmail, location, appToken}: {
-            userEmail: string, location: GQLLocationInput, appToken: string
-        }) => {
-            return null;
-        },
-        sendMedicalStats: (root: any, {userEmail, medicalStats, appToken}: {
-            userEmail: string, medicalStats: GQLMedicalStatsInput, appToken: string
-        }) => {
-            return true;
-        },
-        sendEvent: (root: any, {userEmail, location, medicalStats, eventDescription, appToken}: {
-            userEmail: string, location: GQLLocationInput, medicalStats: GQLMedicalStatsInput, eventDescription: string, appToken: string
-        }) => {
-            return true;
-        }
-        // sendUserLocation: (root: any, {email, location}: {
-        //     email: string, location: GQLLocationInput
-        // }) => {
-        //     return usersService.updateUserLocation(email, location);
-        // },
-        // registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
-        //     console.log("saved user: " + JSON.stringify(user));
-        //     return usersService.register(user);
-        // },
-        // login: (root: any, {email, password}: { email: string, password: string }) => {
-        //     return usersService.login(email, password);
-        // },
-        // setUserInformation: (root: any, {email, userInfo}: { email: string, userInfo: GQLUserInformationInput }) => {
-        //     return usersService.setUserInformation(email, userInfo);
-        // }
+        registerApp: registerApp,
+        registerUser: registerUser,
+        sendUserLocation: sendUserLocation,
+        sendEvent: sendEvent
     },
 };
 
