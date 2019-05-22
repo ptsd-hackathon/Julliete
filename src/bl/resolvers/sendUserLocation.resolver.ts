@@ -1,10 +1,10 @@
-import {GQLLocationInput} from "../../../graphql-types";
+import {GQLLocationInformation, GQLLocationInput} from "../../../graphql-types";
 import {EventsService} from "../services/events.service";
 import {LocationInformation} from "../services/location/locationLogic/location-information";
 
 export async function sendUserLocation(root: any, {userEmail, appToken,language, location}: {
     userEmail: string, appToken: string, language: string, location: GQLLocationInput
-}): Promise<{ geocodedAddress: string; crowdednessLevel: number; weather: { description: string; temperature: string }; pointsOfInterests: Array<String> }> {
+}): Promise<GQLLocationInformation> {
     let eventsService = new EventsService();
     let apikey = 'AIzaSyAxm42yuheNNx0znh7x4qAExlu5MMsnpPY';
     let radius = 100;
@@ -16,6 +16,7 @@ export async function sendUserLocation(root: any, {userEmail, appToken,language,
         crowdednessLevel: locationData.crowdedness,
         geocodedAddress: locationData.address,
         pointsOfInterests: locationData.pointsOfInterest,
-        weather: locationData.weather
+        weather: locationData.weather,
+        coordinates: location
     };
 }
