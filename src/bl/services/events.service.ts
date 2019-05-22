@@ -1,10 +1,11 @@
 import {EventsRepository} from "../../dal/repositories/eventsRepository";
 import {EventDB} from "../../dal/types/event";
 import {UsersRepository} from "../../dal/repositories/usersRepository";
+import { MedicalStatsDB } from "../../dal/types/medicalStats";
 
 export class EventsService {
     public async addNewEvent(userEmail: string, appToken: string, logType: string,
-                             eventDescription: string, location: { lat: number, long: number }) {
+                             eventDescription: string, location?: { lat: number, long: number }, mediacalStats?: MedicalStatsDB[]) {
         await this.validateUserAndApp(userEmail, appToken);
         let eventsRepository = new EventsRepository();
         // @ts-ignore
@@ -15,15 +16,16 @@ export class EventsService {
             eventDescription: eventDescription,
             location: {
                 coordinates: {
-                    latitude: location.lat,
-                    longitude: location.long
+                    latitude: location == undefined ? null : location.lat,
+                    longitude: location == undefined ? null : location.long
                 },
                 crowdedness: null,
                 pointsOfInterests: null,
                 geocodedLocation: null,
                 weather: null
             },
-            timestamp: new Date()
+            timestamp: new Date(),
+            medicalStats: mediacalStats == undefined ? null : mediacalStats
         };
 
         try {

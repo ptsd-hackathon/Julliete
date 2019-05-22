@@ -34,7 +34,7 @@ export class BiobeatWatchService {
     
     constructor() {}
 
-    getMeasurement(patch_id: string, timeStampStart:string, timeStampEnd:string): AxiosPromise<BiobeatMeasurmentsResponse[]> {
+    public getMeasurement(patch_id: string, timeStampStart:string, timeStampEnd:string): AxiosPromise<BiobeatMeasurmentsResponse[]> {
         let getMeasurementsUrl = `https://nkxjoc59ab.execute-api.eu-west-1.amazonaws.com/test/heroes-get-measurement?patch_id=${patch_id}&timestampstart=${timeStampStart}&timestampend=${timeStampEnd}`;
         let biobeatToken: BiobeatTokenReponse;
 
