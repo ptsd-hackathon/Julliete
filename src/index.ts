@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import {dateScalarType} from "./scalars/date.scalar";
 import {DBConnection} from "./dal/dbConnection";
 import {registerApp} from "./bl/resolvers/registerApp.resolver";
 import {sendUserLocation} from "./bl/resolvers/sendUserLocation.resolver";
@@ -13,7 +12,6 @@ import {userEvents} from "./bl/resolvers/userEvents.resolver";
 const {ApolloServer} = require('apollo-server');
 
 const resolvers = {
-    Date: dateScalarType,
     Query: {
         getUserEvents: userEvents
     },

@@ -9,13 +9,13 @@ export interface EventDB extends mongoose.Document {
     logType: string,
     location: {
         coordinates: {
-            latitude: number | null,
-            longitude: number | null
+            lat: number | null,
+            long: number | null
         },
-        weather: any | null,
-        geocodedLocation: any | null,
-        crowdedness: any | null,
-        pointsOfInterests: any[] | null,
+        weather: {temperature: string, description:string} | null,
+        geocodedAddress: string | null,
+        crowdednessLevel: number | null,
+        pointsOfInterests: Array<string> | null,
     } | null,
     medicalStats: MedicalStatsDB[] | null,
     timestamp: Date
@@ -28,12 +28,12 @@ const EventSchema: Schema = new Schema({
     logType: String,
     location: {
         coordinates: {
-            latitude: Number,
-            longitude: Number
+            lat: Number,
+            long: Number
         },
         weather: Schema.Types.Mixed,
-        geocodedLocation: Schema.Types.Mixed,
-        crowdedness: Schema.Types.Mixed,
+        geocodedAddress: Schema.Types.Mixed,
+        crowdednessLevel: Schema.Types.Mixed,
         pointsOfInterests: [Schema.Types.Mixed],
     },
     medicalStats: [MedicalStatsSchemaConst],

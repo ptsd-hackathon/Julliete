@@ -1,14 +1,14 @@
-scalar Date
+scalar DateTime
 
 type Query {
-    getUserEvents(userEmail: String, appToken: String, fromDate: Date, toDate: Date): [UserEvent]
+    getUserEvents(userEmail: String, appToken: String, fromDate: DateTime, toDate: DateTime): [UserEvent]
 }
 
 type Mutation{
     registerApp(appName: String): AppToken
     registerUser(userEmail: String, appToken: String, clockSerial: String, userMetadata: UserMetadataInput): Boolean
-    sendUserLocation(userEmail: String, appToken: String, location: LocationInput): LocationInformation
-    sendEvent(userEmail: String, appToken: String, location: LocationInput, eventDescription: String, logType: LogType): Boolean
+    sendUserLocation(userEmail: String, appToken: String, language:String, locationCoordinates: LocationInput): LocationInformation
+    sendEvent(userEmail: String, appToken: String, language:String, locationCoordinates: LocationInput, eventDescription: String, logType: LogType): Boolean
 }
 
 type UserEvent{
@@ -18,7 +18,7 @@ type UserEvent{
     logType: String
     location: LocationInformation
     medicalStats: [MedicalStats]
-    timestamp: Date
+    timestamp: DateTime
 }
 
 type MedicalStats{
@@ -46,12 +46,15 @@ enum LogType{
     STOPPED,
     REPEATABLE
 }
-
+type Weather{
+    description:String,
+    temperature:String
+}
 type LocationInformation{
     geocodedAddress: String,
-    crowdednessLevel: String,
+    crowdednessLevel: Float,
     pointsOfInterests: [String],
-    weather: String,
+    weather: Weather,
     coordinates: Coordinates
 }
 
@@ -62,7 +65,7 @@ type AppToken{
 input UserMetadataInput{
     fullName: String,
     gender: Gender,
-    dateOfBirth: Date,
+    dateOfBirth: DateTime,
     address: AddressInput,
     medicalInformation: MedicalInformationInput
 }
