@@ -4,7 +4,7 @@ import {UsersRepository} from "../../dal/repositories/usersRepository";
 
 export class EventsService {
     public async addNewEvent(userEmail: string, appToken: string, logType: string,
-                             eventDescription: string, location: { lat: number, long: number }) {
+                             eventDescription: string, location: { lat: number, long: number },locationData:LocationData) {
         await this.validateUserAndApp(userEmail, appToken);
         let eventsRepository = new EventsRepository();
         // @ts-ignore
@@ -18,10 +18,10 @@ export class EventsService {
                     latitude: location.lat,
                     longitude: location.long
                 },
-                crowdedness: null,
-                pointsOfInterests: null,
-                geocodedLocation: null,
-                weather: null
+                crowdedness: locationData.crowdedness,
+                pointsOfInterests: locationData.pointsOfInterest,
+                geocodedLocation: locationData.address,
+                weather: locationData.weather
             },
             timestamp: new Date()
         };
