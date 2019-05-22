@@ -16,7 +16,7 @@ export interface GQLQuery {
     getUserEvents?: Array<GQLUserEvent | null>;
 }
 
-export type GQLDate = any;
+export type GQLDateTime = any;
 
 export interface GQLUserEvent {
     userEmail?: string;
@@ -25,7 +25,7 @@ export interface GQLUserEvent {
     logType?: string;
     location?: GQLLocationInformation;
     medicalStats?: Array<GQLMedicalStats | null>;
-    timestamp?: GQLDate;
+    timestamp?: GQLDateTime;
 }
 
 export interface GQLLocationInformation {
@@ -75,7 +75,7 @@ export interface GQLAppToken {
 export interface GQLUserMetadataInput {
   fullName?: string;
   gender?: GQLGender;
-  dateOfBirth?: GQLDate;
+    dateOfBirth?: GQLDateTime;
   address?: GQLAddressInput;
   medicalInformation?: GQLMedicalInformationInput;
 }
@@ -119,7 +119,7 @@ export enum GQLLogType {
  */
 export interface GQLResolver {
   Query?: GQLQueryTypeResolver;
-  Date?: GraphQLScalarType;
+    DateTime?: GraphQLScalarType;
     UserEvent?: GQLUserEventTypeResolver;
   LocationInformation?: GQLLocationInformationTypeResolver;
     Coordinates?: GQLCoordinatesTypeResolver;
@@ -134,10 +134,9 @@ export interface GQLQueryTypeResolver<TParent = any> {
 export interface QueryToGetUserEventsArgs {
     userEmail?: string;
     appToken?: string;
-    fromDate?: GQLDate;
-    toDate?: GQLDate;
+    fromDate?: GQLDateTime;
+    toDate?: GQLDateTime;
 }
-
 export interface QueryToGetUserEventsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToGetUserEventsArgs, context: any, info: GraphQLResolveInfo): TResult;
 }

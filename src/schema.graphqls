@@ -1,7 +1,7 @@
-scalar Date
+scalar DateTime
 
 type Query {
-    getUserEvents(userEmail: String, appToken: String, fromDate: Date, toDate: Date): [UserEvent]
+    getUserEvents(userEmail: String, appToken: String, fromDate: DateTime, toDate: DateTime): [UserEvent]
 }
 
 type Mutation{
@@ -18,7 +18,7 @@ type UserEvent{
     logType: String
     location: LocationInformation
     medicalStats: [MedicalStats]
-    timestamp: Date
+    timestamp: DateTime
 }
 
 type MedicalStats{
@@ -62,7 +62,7 @@ type AppToken{
 input UserMetadataInput{
     fullName: String,
     gender: Gender,
-    dateOfBirth: Date,
+    dateOfBirth: DateTime,
     address: AddressInput,
     medicalInformation: MedicalInformationInput
 }
