@@ -12,9 +12,9 @@ export async function registerUser(root: any, {userEmail, appToken, clockSerial,
         throw new Error("Cannot identify app token");
     }
     let usersRepository = new UsersRepository();
-    let foundUserDB = await usersRepository.findByEmail(userEmail);
+    let foundUserDB = await usersRepository.findByEmailAndAppToken(userEmail, appToken);
     if (foundUserDB) {
-        console.log("User with email " + userEmail + " already exists");
+        console.log("User with email " + userEmail + " already exists for app token " + appToken);
         throw new Error("User with email " + userEmail + " already exists");
     }
     // @ts-ignore
@@ -30,5 +30,7 @@ export async function registerUser(root: any, {userEmail, appToken, clockSerial,
         }
     };
     await usersRepository.save(userDB);
+
+    console.log("successfully registered user with email " + userEmail);
     return true;
 }
