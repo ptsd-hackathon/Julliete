@@ -21,9 +21,9 @@ export class ClockIntegratorScheduler {
                 if (user.clockSerial) {
                     let biobeatWatchMeasurements: BiobeatMeasurmentsResponse[];
                     let endDate = new Date();
-                    let startDate = new Date(endDate.getMilliseconds() - 1800000);
-                    let timeStampStart = moment(startDate).format('yyMMddhhmmss').toString();
-                    let timeStampEnd = moment(endDate).format('yyMMddhhmmss').toString();
+                    let startDate = new Date(Date.now()-1800000);
+                    let timeStampStart = moment(startDate).format('YYMMDDHHmmss').toString();
+                    let timeStampEnd = moment(endDate).format('YYMMDDHHmmss').toString();
                     this.biobeatWatchService.getMeasurement(user.clockSerial, timeStampStart, timeStampEnd).then(biobeatWatchMeasurementsResponse => {
                         biobeatWatchMeasurements = biobeatWatchMeasurementsResponse.data;
                         let mappedBiobeatWatchMeasurments = this.mapBiobeatMedicalStats(biobeatWatchMeasurements)
