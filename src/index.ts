@@ -8,12 +8,14 @@ import {sendEvent} from "./bl/resolvers/sendEvent.resolver";
 import {scheduleJob} from "node-schedule";
 import {ClockIntegratorScheduler} from "./bl/schedulers/clockIntegrator.scheduler";
 import {userEvents} from "./bl/resolvers/userEvents.resolver";
+import {authUser} from './bl/resolvers/authUser.resolver';
 
 const {ApolloServer} = require('apollo-server');
 
 const resolvers = {
     Query: {
-        getUserEvents: userEvents
+        getUserEvents: userEvents,
+        authUser: authUser
     },
     Mutation: {
         registerApp: registerApp,

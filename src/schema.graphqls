@@ -2,6 +2,7 @@ scalar DateTime
 
 type Query {
     getUserEvents(userEmail: String, appToken: String, fromDate: DateTime, toDate: DateTime): [UserEvent]
+    authUser(userEmail: String, appToken: String): Boolean
 }
 
 type Mutation{
