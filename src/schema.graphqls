@@ -7,7 +7,7 @@ type Query {
 type Mutation{
     registerApp(appName: String): AppToken
     registerUser(userEmail: String, appToken: String, clockSerial: String, userMetadata: UserMetadataInput): Boolean
-    sendUserLocation(userEmail: String, appToken: String, location: LocationInput): LocationInformation
+    sendUserLocation(userEmail: String, appToken: String, language:String, location: LocationInput): LocationInformation
     sendEvent(userEmail: String, appToken: String, location: LocationInput, eventDescription: String, logType: LogType): Boolean
 }
 
@@ -16,12 +16,15 @@ enum LogType{
     STOPPED,
     REPEATABLE
 }
-
+type Weather{
+    description:String,
+    temperature:String
+}
 type LocationInformation{
     geocodedAddress: String,
-    crowdednessLevel: String,
+    crowdednessLevel: Float,
     pointsOfInterests: [String],
-    weather: String
+    weather: Weather
 }
 
 type AppToken{
@@ -53,6 +56,10 @@ enum Gender{
 }
 
 input LocationInput{
+    lat: Float!
+    long: Float!
+}
+type Location{
     lat: Float!
     long: Float!
 }

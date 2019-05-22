@@ -1,12 +1,21 @@
-import {GQLLocationInformation, GQLLocationInput} from "../../../graphql-types";
+import {GQLLocationInput} from "../../../graphql-types";
 import {EventsService} from "../services/events.service";
+import {LocationInformation} from "../services/location/locationLogic/location-information";
 
-export async function sendUserLocation(root: any, {userEmail, appToken, location}: {
-    userEmail: string, appToken: string, location: GQLLocationInput
-}): Promise<GQLLocationInformation | null> {
+export async function sendUserLocation(root: any, {userEmail, appToken,language, location}: {
+    userEmail: string, appToken: string, language: string, location: GQLLocationInput
+}): Promise<{ geocodedAddress: string; crowdednessLevel: number; weather: { description: string; temperature: string }; pointsOfInterests: Array<String> }> {
     let eventsService = new EventsService();
-    await eventsService.addNewEvent(userEmail, appToken, "REPEATABLE", "Standard Location Input",
-        location);
+    let apikey = 'AIzaSyAxm42yuheNNx0znh7x4qAExlu5MMsnpPY';
+    let radius = 100;
+    let locationData = await LocationInformation.getLocationData(apikey, location.lat, location.long, language, radius);
     console.log("Saved new event");
-    return {crowdednessLevel: "5", geocodedAddress: "Adsf", pointsOfInterests: [], weather: "adsf"};
+    await eventsService.addNewEvent(userEmail, appToken, "REPEATABLE", "Standard Location Input",
+        location, locationData);
+    return await {
+        crowdednessLevel: locationData.crowdedness,
+        geocodedAddress: locationData.address,
+        pointsOfInterests: locationData.pointsOfInterest,
+        weather: locationData.weather
+    };
 }
