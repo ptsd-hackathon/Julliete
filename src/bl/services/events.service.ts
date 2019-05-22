@@ -6,7 +6,7 @@ import {GQLCoordinates, GQLWeather} from "../../../graphql-types";
 
 export class EventsService {
     public async addNewEvent(userEmail: string, appToken: string, logType: string,
-                             eventDescription: string, location: { lat: number, long: number }, mediacalStats?: MedicalStatsDB[], locationData?: LocationData) {
+                             eventDescription: string, location?: { lat: number, long: number }, mediacalStats?: MedicalStatsDB[], locationData?: LocationData) {
         await this.validateUserAndApp(userEmail, appToken);
         let eventsRepository = new EventsRepository();
         // @ts-ignore
@@ -17,13 +17,13 @@ export class EventsService {
             eventDescription: eventDescription,
             location: {
                 coordinates: {
-                    latitude: location == undefined ? null : location.lat,
-                    longitude: location == undefined ? null : location.long
+                    lat: location == undefined ? null : location.lat,
+                    long: location == undefined ? null : location.long
                 },
-                crowdednessLevel: locationData.crowdedness,
-                pointsOfInterests: locationData.pointsOfInterest,
-                geocodedAddress: locationData.address,
-                weather: locationData.weather
+                crowdednessLevel: locationData == undefined ? null : locationData.crowdedness,
+                pointsOfInterests: locationData == undefined ? null : locationData.pointsOfInterest,
+                geocodedAddress: locationData == undefined ? null : locationData.address,
+                weather: locationData == undefined ? null : locationData.weather
             },
             timestamp: new Date(),
             medicalStats: mediacalStats == undefined ? null : mediacalStats
