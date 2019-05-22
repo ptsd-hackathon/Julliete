@@ -1,102 +1,43 @@
 scalar Date
 
 type Query {
-    weatherPreferences: WeatherPreferences
-    placesTypes: [PlaceInfo],
-    userCondition(email: String!): UserCondition
+    a: String
 }
 
 type Mutation{
-    sendUserLocation(email: String, location: LocationInput): Boolean
-    registerUser(user: UserRegistrationInput): Boolean
-    setUserInformation(email: String, userInfo: UserInformationInput): Boolean
-    login(email: String, password: String): Boolean
+    registerApp(appName: String): AppToken
+    registerUser(userEmail: String, appToken: String, clockSerial: String, userMetadata: UserMetadataInput): Boolean
+    sendUserLocation(userEmail: String, appToken: String, location: LocationInput): LocationInformation
+    sendEvent(userEmail: String, appToken: String, location: LocationInput, eventDescription: String, logType: LogType): Boolean
 }
 
-type User{
-    id: String
-    email: String
-    userInfo: UserInformation
+enum LogType{
+    STARTED,
+    STOPPED,
+    REPEATABLE
 }
 
-input UserRegistrationInput{
-    email: String!
-    password: String!
-    privateName: String!
-    lastName: String!
-    gender: String!
-    dateOfBirth: Date!
-    phoneNumber: String!
+type LocationInformation{
+    geocodedAddress: String,
+    crowdednessLevel: String,
+    pointsOfInterests: [String],
+    weather: String
 }
 
-type UserInformation{
-    privateName: String
-    lastName: String
-    gender: Gender
-    dateOfBirth: Date
-    phoneNumber: String
-    initialPanicAttackDate: Date
-    sleep: SleepingHours
-    emergencyContacts: [Contact]
-    isShabbatKeeper: Boolean
-    isSmoking: Boolean
-    familyStatus: FamilyStatus
-    traumaType: TraumaType
-    medicalInformation: MedicalInformation
-    address: Address
-    stressHours: [Int]
-    stressfullPlaces: [String]
+type AppToken{
+    token: String
 }
 
-type UserCondition{
-    weatherCondition: WeatherSeverityCondition
-    placesCondition: PlacesSeverityCondition
-    newsCondition: NewsSeverityCondition
-}
-
-type WeatherSeverityCondition{
-    currentWeatherType: String
-    severity: Int
-}
-
-type PlacesSeverityCondition{
-    currentPlaceType: String
-    severity: Int
-}
-
-type NewsSeverityCondition{
-    severeNewsArray: [NewsObject]
-}
-
-type NewsObject{
-    title: String!,
-    url: String!,
-    severity: Int!
-}
-
-input UserInformationInput{
-    privateName: String
-    lastName: String
-    gender: Gender
-    dateOfBirth: Date
-    phoneNumber: String
-    initialPanicAttackDate: Date
-    sleep: SleepingHoursInput
-    emergencyContacts: [ContactInput]
-    isShabbatKeeper: Boolean
-    isSmoking: Boolean
-    familyStatus: FamilyStatusInput
-    traumaType: TraumaType
+input UserMetadataInput{
+    fullName: String,
+    gender: Gender,
+    dateOfBirth: Date,
+    address: AddressInput,
     medicalInformation: MedicalInformationInput
-    address: AddressInput
-    stressHours: [Int]
-    stressfullPlaces: [String]
-    weatherTriggers: [WeatherTriggerInput]
 }
 
-input WeatherTriggerInput{
-    type: String
-    rate: Int
+input MedicalInformationInput{
+    blabla: String
 }
 
 input AddressInput{
@@ -106,84 +47,9 @@ input AddressInput{
     apartment: String!
 }
 
-type Address{
-    state: String
-    city: String
-    street: String
-    apartment: String
-}
-
-input MedicalInformationInput{
-    isTaking: Boolean
-    drugs: [String]
-}
-
-type MedicalInformation{
-    isTaking: Boolean
-    drugs: [String]
-}
-
 enum Gender{
     MALE,
     FEMALE
-}
-
-enum TraumaType{
-    SEX_ASSAULT
-    ARMY
-}
-
-input FamilyStatusInput{
-    isMarried: Boolean
-    numberOfChildren: Int
-}
-
-
-type FamilyStatus{
-    isMarried: Boolean
-    numberOfChildren: Int
-}
-
-
-type Contact{
-    phoneNumber: String
-    name: String
-}
-
-input ContactInput{
-    phoneNumber: String
-    name: String
-}
-
-type SleepingHours{
-    bedHour: Int
-    wakingHour: Int
-}
-
-input SleepingHoursInput{
-    bedHour: String
-    wakingHour: String
-}
-
-
-type WeatherFamily{
-    type: String,
-    title: String
-}
-
-type Range{
-    min: Int,
-    max: Int
-}
-
-type WeatherPreferences{
-    families: [WeatherFamily]
-    range: Range
-}
-
-type PlaceInfo{
-    type: String
-    title: String
 }
 
 input LocationInput{

@@ -1,67 +1,24 @@
-import {GQLLocationInput, GQLUserInformationInput, GQLUserRegistrationInput} from "../graphql-types";
 import fs from "fs";
 import path from "path";
-import {scheduleJob} from "node-schedule";
-import {UsersService} from "./bl/services/usersService";
-import {NewsSeverityServiceConnector} from "./bl/connectors/newsServerityService.connector";
-import {WeatherAndCrowdedPlacesServiceConnector} from "./bl/connectors/weatherAndCrowdedPlacesServiceConnector";
-import {BodyStatsServiceConnector} from "./bl/connectors/bodyStatsService.connector";
-import {UsersRepository} from "./DAL/repositories/usersRepository";
 import {dateScalarType} from "./scalars/date.scalar";
-import {UserConditionService} from "./bl/services/userConditionService";
-import {UserDB} from "./DAL/types/user";
+import {DBConnection} from "./dal/dbConnection";
+import {registerApp} from "./bl/resolvers/registerApp.resolver";
+import {sendUserLocation} from "./bl/resolvers/sendUserLocation.resolver";
+import {registerUser} from "./bl/resolvers/registerUser.resolver";
+import {sendEvent} from "./bl/resolvers/sendEvent.resolver";
 
 const {ApolloServer} = require('apollo-server');
-
-const usersService = new UsersService(new UsersRepository());
-const statsService: UserConditionService = new UserConditionService(new NewsSeverityServiceConnector(), new WeatherAndCrowdedPlacesServiceConnector(), new BodyStatsServiceConnector(), usersService);
-
 
 const resolvers = {
     Date: dateScalarType,
     Query: {
-        weatherPreferences: () => {
-            let limaConnector = new WeatherAndCrowdedPlacesServiceConnector();
-            return limaConnector.getWeatherPreferences().then((response: any) => {
-                return response.data;
-            }).catch((err) => {
-                throw new Error(err);
-            });
-        },
-        placesTypes: () => {
-            let limaConnector = new WeatherAndCrowdedPlacesServiceConnector();
-            return limaConnector.getPlaceTypes().then(res => {
-                return res.data.places;
-            }).catch(err => console.log(err.response));
-        },
-        userCondition: (root: any, {email}: { email: string }) => {
-            return usersService.getUserByEmail(email).then((user: UserDB | null) => {
-                if (!user) {
-                    throw new Error("No user found");
-                } else {
-                    return user.userCondition;
-                }
-            }).catch(err => {
-                throw new Error(err);
-            });
-        }
+        a: () => "asdfasd"
     },
     Mutation: {
-        sendUserLocation: (root: any, {email, location}: {
-            email: string, location: GQLLocationInput
-        }) => {
-            return usersService.updateUserLocation(email, location);
-        },
-        registerUser: (root: any, {user}: { user: GQLUserRegistrationInput }) => {
-            console.log("saved user: " + JSON.stringify(user));
-            return usersService.register(user);
-        },
-        login: (root: any, {email, password}: { email: string, password: string }) => {
-            return usersService.login(email, password);
-        },
-        setUserInformation: (root: any, {email, userInfo}: { email: string, userInfo: GQLUserInformationInput }) => {
-            return usersService.setUserInformation(email, userInfo);
-        }
+        registerApp: registerApp,
+        registerUser: registerUser,
+        sendUserLocation: sendUserLocation,
+        sendEvent: sendEvent
     },
 };
 
@@ -70,11 +27,8 @@ const typeDefs = fs.readFileSync(path.join(__dirname, "schema.graphqls"), "utf8"
 const server = new ApolloServer({typeDefs, resolvers});
 
 server.listen().then(({url}: { url: string }) => {
+    let dbConnection = new DBConnection();
+    dbConnection.connect();
     console.log(`🚀  Server ready at ${url}`);
-});
-
-const scheduler = scheduleJob('*/5 * * * * *', function () {
-    console.log("scheduled task is running now");
-    statsService.calculateUsersCondition();
 });
 
