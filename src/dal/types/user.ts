@@ -4,6 +4,7 @@ import {model, Schema} from "mongoose";
 export interface UserDB extends mongoose.Document {
     email: string,
     appToken: string,
+    clockSerial: string,
     metadata: {
         fullName: string | undefined,
         gender: string | undefined,
@@ -16,6 +17,7 @@ export interface UserDB extends mongoose.Document {
 const UserSchema: Schema = new Schema({
     email: String,
     appToken: String,
+    clockSerial: String,
     metadata: {
         fullName: String,
         gender: String,

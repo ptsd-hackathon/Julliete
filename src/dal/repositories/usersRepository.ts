@@ -5,6 +5,10 @@ export class UsersRepository {
         return await User.findOne({'email': email, 'appToken': appToken});
     }
 
+    public async findAll(): Promise<UserDB[] | null> {
+        return await User.find({});
+    }
+
     public save(user: UserDB) {
         return new User(user).save();
     }
