@@ -364,7 +364,7 @@ export interface MutationToSendEventArgs {
   userEmail?: string;
   appToken?: string;
   language?: string;
-  location?: GQLLocationInput;
+  locationCoordinates?: GQLLocationInput;
   eventDescription?: string;
   logType?: GQLLogType;
 }
