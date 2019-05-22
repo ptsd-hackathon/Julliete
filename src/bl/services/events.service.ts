@@ -1,10 +1,11 @@
 import {EventsRepository} from "../../dal/repositories/eventsRepository";
 import {EventDB} from "../../dal/types/event";
 import {UsersRepository} from "../../dal/repositories/usersRepository";
+import {GQLCoordinates, GQLWeather} from "../../../graphql-types";
 
 export class EventsService {
     public async addNewEvent(userEmail: string, appToken: string, logType: string,
-                             eventDescription: string, location: { lat: number, long: number },locationData:LocationData) {
+                             eventDescription: string, location: { lat: number, long: number }, locationData: LocationData) {
         await this.validateUserAndApp(userEmail, appToken);
         let eventsRepository = new EventsRepository();
         // @ts-ignore
@@ -15,12 +16,12 @@ export class EventsService {
             eventDescription: eventDescription,
             location: {
                 coordinates: {
-                    latitude: location.lat,
-                    longitude: location.long
+                    lat: location.lat,
+                    long: location.long
                 },
-                crowdedness: locationData.crowdedness,
+                crowdednessLevel: locationData.crowdedness,
                 pointsOfInterests: locationData.pointsOfInterest,
-                geocodedLocation: locationData.address,
+                geocodedAddress: locationData.address,
                 weather: locationData.weather
             },
             timestamp: new Date()
