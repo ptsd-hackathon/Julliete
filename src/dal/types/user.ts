@@ -5,10 +5,10 @@ export interface UserDB extends mongoose.Document {
     email: string,
     appToken: string,
     metadata: {
-        fullName: string,
-        gender: string,
+        fullName: string | undefined,
+        gender: string | undefined,
         dateOfBirth: Date,
-        address: { state: string, city: string, street: string, apartment: string },
+        address: { state: string, city: string, street: string, apartment: string } | undefined,
         medicalInformation: any
     }
 }
