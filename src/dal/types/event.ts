@@ -12,10 +12,10 @@ export interface EventDB extends mongoose.Document {
             latitude: number,
             longitude: number
         },
-        weather: any | null,
-        geocodedLocation: any | null,
-        crowdedness: any | null,
-        pointsOfInterests: any[] | null,
+        weather: {temperature: string, description:string},
+        geocodedLocation: string,
+        crowdedness: number,
+        pointsOfInterests: Array<string>,
     }
     medicalStats: MedicalStatsDB[],
     timestamp: Date
