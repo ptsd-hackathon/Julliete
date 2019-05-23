@@ -29,7 +29,7 @@ type MedicalStats{
     strokeVolume: Int
     spo2: Int,
     movement: Int
-    cardiacIndex: Int
+    cardiacIndex: Float
     heartbeatRateVariance: Int
     heartbeatRate: Int
     MAPrs: Int
@@ -39,7 +39,7 @@ type MedicalStats{
     diastolicBloodPressure: Int
     temperature: Float
     sweat: Int
-    caloris: Float
+    calories: Float
 }
 
 enum LogType{

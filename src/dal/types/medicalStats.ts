@@ -17,6 +17,7 @@ export interface MedicalStatsDB extends mongoose.Document {
     temperature: number,
     sweat: number,
     calories: number,
+    MAPrs: number,
     timestamp: number
 }
 
@@ -36,6 +37,7 @@ const MedicalStatsSchema: Schema = new Schema({
     temperature: Number,
     sweat: Number,
     calories: Number,
+    MAPrs: Number,
     timestamp: Number
 });
 

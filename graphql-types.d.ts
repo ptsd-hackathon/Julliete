@@ -64,7 +64,7 @@ export interface GQLMedicalStats {
   diastolicBloodPressure?: number;
   temperature?: number;
   sweat?: number;
-  caloris?: number;
+  calories?: number;
 }
 
 export interface GQLMutation {
@@ -266,7 +266,7 @@ export interface GQLMedicalStatsTypeResolver<TParent = any> {
   diastolicBloodPressure?: MedicalStatsToDiastolicBloodPressureResolver<TParent>;
   temperature?: MedicalStatsToTemperatureResolver<TParent>;
   sweat?: MedicalStatsToSweatResolver<TParent>;
-  caloris?: MedicalStatsToCalorisResolver<TParent>;
+  calories?: MedicalStatsToCaloriesResolver<TParent>;
 }
 
 export interface MedicalStatsToBreathRateResolver<TParent = any, TResult = any> {
@@ -333,7 +333,7 @@ export interface MedicalStatsToSweatResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface MedicalStatsToCalorisResolver<TParent = any, TResult = any> {
+export interface MedicalStatsToCaloriesResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 

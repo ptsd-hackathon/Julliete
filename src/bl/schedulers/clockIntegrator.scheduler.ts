@@ -1,8 +1,8 @@
-import { UsersRepository } from "../../dal/repositories/usersRepository";
-import { BiobeatWatchService, BiobeatMeasurmentsResponse } from "../services/biobeatWatchService";
-import { MedicalStatsDB } from "../../dal/types/medicalStats";
-import { EventsService } from "../services/events.service";
-import { AxiosResponse } from "axios";
+import {UsersRepository} from "../../dal/repositories/usersRepository";
+import {BiobeatMeasurmentsResponse, BiobeatWatchService} from "../services/biobeatWatchService";
+import {MedicalStatsDB} from "../../dal/types/medicalStats";
+import {EventsService} from "../services/events.service";
+import {AxiosResponse} from "axios";
 import moment from 'moment';
 
 export class ClockIntegratorScheduler {
@@ -32,8 +32,7 @@ export class ClockIntegratorScheduler {
                             eventsService.addNewEvent(user.email, user.appToken, "REPEATABLE", "Biobeat Watch Medical Stats",
                                 undefined, biobeatWatchMeasurements);
                         }
-                    }
-                    catch (e) {
+                    } catch (e) {
                         console.log("error while handling measurements of watch id " + user.clockSerial + " " + e);
                     }
                 }
@@ -44,23 +43,24 @@ export class ClockIntegratorScheduler {
     private mapBiobeatMedicalStats(biobeatWatchMeasurements: AxiosResponse<BiobeatMeasurmentsResponse[]>): MedicalStatsDB[] {
         //@ts-ignore
         let medicalStatsDB: MedicalStatsDB[] = biobeatWatchMeasurements.data.map(mes => ({
-            breathRate: mes.rr,
-            protocolNumber: mes.protocol_num,
-            systolicBloodPressure: mes.sbp,
-            strokeVolume: mes.sv,
-            spo2: mes.spo2,
-            movement: mes.movement,
-            cardiacIndex: mes.ci,
-            heartbeatRateVariance: mes.hrv,
-            heartbeatRate: mes.hr,
-            svr: mes.svr,
-            cardiacOutput: mes.co,
-            diastolicBloodPressure: mes.dbp,
-            temperature: mes.temp,
-            sweat: mes.sweat,
-            calories: mes.calories,
-            timestamp: mes.timestamp
-        }
+                breathRate: mes.rr,
+                protocolNumber: mes.protocol_num,
+                systolicBloodPressure: mes.sbp,
+                strokeVolume: mes.sv,
+                spo2: mes.spo2,
+                movement: mes.movement,
+                cardiacIndex: mes.ci,
+                heartbeatRateVariance: mes.hrv,
+                heartbeatRate: mes.hr,
+                svr: mes.svr,
+                cardiacOutput: mes.co,
+                diastolicBloodPressure: mes.dbp,
+                temperature: mes.temp,
+                sweat: mes.sweat,
+                MAPrs: mes.MAPrs,
+                calories: mes.calories,
+                timestamp: mes.timestamp
+            }
         ));
         return medicalStatsDB;
     }

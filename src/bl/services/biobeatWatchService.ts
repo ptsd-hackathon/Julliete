@@ -1,4 +1,4 @@
-import axios, { AxiosPromise, AxiosResponse } from "axios";
+import axios, {AxiosResponse} from "axios";
 import moment from 'moment';
 
 export interface BiobeatTokenReponse {
@@ -25,7 +25,8 @@ export interface BiobeatMeasurmentsResponse {
     dbp: number;
     temp: number;
     sweat: number;
-    calories: number
+    MAPrs: number;
+    calories: number;
 }
 
 export class BiobeatWatchService {
