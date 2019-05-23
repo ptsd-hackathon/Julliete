@@ -39,7 +39,7 @@ type MedicalStats{
     diastolicBloodPressure: Int
     temperature: Int
     sweat: Int
-    caloris: Int
+    caloris: Float
 }
 
 enum LogType{
