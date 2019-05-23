@@ -1,12 +1,12 @@
 import {EventsRepository} from "../../dal/repositories/eventsRepository";
 import {EventDB} from "../../dal/types/event";
 import {UsersRepository} from "../../dal/repositories/usersRepository";
-import { MedicalStatsDB } from "../../dal/types/medicalStats";
-import {GQLCoordinates, GQLWeather} from "../../../graphql-types";
+import {MedicalStatsDB} from "../../dal/types/medicalStats";
 
 export class EventsService {
     public async addNewEvent(userEmail: string, appToken: string, logType: string,
-                             eventDescription: string, location?: { lat: number, long: number }, medicalStats?: MedicalStatsDB[], locationData?: LocationData) {
+                             eventDescription: string, location?: { lat: number, long: number },
+                             medicalStats?: MedicalStatsDB[], locationData?: LocationData, intensity?: number) {
         await this.validateUserAndApp(userEmail, appToken);
         let eventsRepository = new EventsRepository();
         // @ts-ignore
@@ -26,7 +26,8 @@ export class EventsService {
                 weather: locationData == undefined ? null : locationData.weather
             },
             timestamp: new Date(),
-            medicalStats: medicalStats == undefined ? null : medicalStats
+            medicalStats: medicalStats == undefined ? null : medicalStats,
+            intensity: intensity ? intensity : null
         };
 
         try {

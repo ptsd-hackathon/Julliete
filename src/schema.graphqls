@@ -9,7 +9,8 @@ type Mutation{
     registerApp(appName: String): AppToken
     registerUser(userEmail: String, appToken: String, clockSerial: String, userMetadata: UserMetadataInput): Boolean
     sendUserLocation(userEmail: String, appToken: String, language:String, locationCoordinates: LocationInput): LocationInformation
-    sendEvent(userEmail: String, appToken: String, language:String, locationCoordinates: LocationInput, eventDescription: String, logType: LogType): Boolean
+    sendEvent(userEmail: String, appToken: String, language:String, locationCoordinates: LocationInput,
+     eventDescription: String, logType: LogType, intensity: Int): Boolean
 }
 
 type UserEvent{
