@@ -34,7 +34,7 @@ type MedicalStats{
     heartbeatRate: Int
     MAPrs: Int
     svr: Int
-    cardiacOutput: Int
+    cardiacOutput: Float
     battery: Int
     diastolicBloodPressure: Int
     temperature: Float
