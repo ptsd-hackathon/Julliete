@@ -378,6 +378,7 @@ export interface MutationToSendEventArgs {
   locationCoordinates?: GQLLocationInput;
   eventDescription?: string;
   logType?: GQLLogType;
+    intensity?: number;
 }
 export interface MutationToSendEventResolver<TParent = any, TResult = any> {
   (parent: TParent, args: MutationToSendEventArgs, context: any, info: GraphQLResolveInfo): TResult;
