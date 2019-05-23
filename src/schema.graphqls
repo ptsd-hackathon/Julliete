@@ -37,7 +37,7 @@ type MedicalStats{
     cardiacOutput: Int
     battery: Int
     diastolicBloodPressure: Int
-    temperature: Int
+    temperature: Float
     sweat: Int
     caloris: Float
 }
