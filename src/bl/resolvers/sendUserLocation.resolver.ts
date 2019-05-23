@@ -9,7 +9,7 @@ export async function sendUserLocation(root: any, {userEmail, appToken, language
     let locationData = await LocationInformation.getLocationData(locationCoordinates.lat, locationCoordinates.long, language);
     console.log("Saved new event");
     await eventsService.addNewEvent(userEmail, appToken, "REPEATABLE", "Standard Location Input",
-        locationCoordinates, locationData);
+        locationCoordinates, [], locationData);
     return await {
         crowdednessLevel: locationData.crowdedness,
         geocodedAddress: locationData.address,

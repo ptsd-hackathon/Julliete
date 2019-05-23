@@ -1,8 +1,9 @@
-import {UsersRepository} from "../../dal/repositories/usersRepository";
+import { UsersRepository } from "../../dal/repositories/usersRepository";
 import { BiobeatWatchService, BiobeatMeasurmentsResponse } from "../services/biobeatWatchService";
 import { MedicalStatsDB } from "../../dal/types/medicalStats";
 import { EventsService } from "../services/events.service";
-const moment = require('moment'); 
+import { AxiosResponse } from "axios";
+import moment from 'moment';
 
 export class ClockIntegratorScheduler {
     private usersRepository: UsersRepository;
@@ -17,27 +18,32 @@ export class ClockIntegratorScheduler {
         let eventsService = new EventsService();
         let users = await this.usersRepository.findAll();
         if (users) {
-           await users.forEach(user => {
+            users.forEach(async user => {
                 if (user.clockSerial) {
-                    let biobeatWatchMeasurements: BiobeatMeasurmentsResponse[];
                     let endDate = new Date();
-                    let startDate = new Date(Date.now()-1800000);
+                    let startDate = new Date(Date.now() - 1800000);
                     let timeStampStart = moment(startDate).format('YYMMDDHHmmss').toString();
                     let timeStampEnd = moment(endDate).format('YYMMDDHHmmss').toString();
-                    this.biobeatWatchService.getMeasurement(user.clockSerial, timeStampStart, timeStampEnd).then(biobeatWatchMeasurementsResponse => {
-                        biobeatWatchMeasurements = biobeatWatchMeasurementsResponse.data;
-                        let mappedBiobeatWatchMeasurments = this.mapBiobeatMedicalStats(biobeatWatchMeasurements)
-                        eventsService.addNewEvent(user.email, user.appToken, "REPEATABLE", "Biobeat Watch Medical Stats",
-                        undefined, mappedBiobeatWatchMeasurments);
-                    });
+                    try {
+                        let biobeatWatchMeasurementsResponse = await this.biobeatWatchService.getMeasurement(user.clockSerial, timeStampStart, timeStampEnd);
+                        let biobeatWatchMeasurements = this.mapBiobeatMedicalStats(biobeatWatchMeasurementsResponse);
+                        console.log("watch " + user.clockSerial + " measurements are: " + JSON.stringify(biobeatWatchMeasurements));
+                        if (biobeatWatchMeasurements && biobeatWatchMeasurements != []) {
+                            eventsService.addNewEvent(user.email, user.appToken, "REPEATABLE", "Biobeat Watch Medical Stats",
+                                undefined, biobeatWatchMeasurements);
+                        }
+                    }
+                    catch (e) {
+                        console.log("error while handling measurements of watch id " + user.clockSerial + " " + e);
+                    }
                 }
             });
         }
     }
 
-    private mapBiobeatMedicalStats(biobeatWatchMeasurements: BiobeatMeasurmentsResponse[]): MedicalStatsDB[]{
+    private mapBiobeatMedicalStats(biobeatWatchMeasurements: AxiosResponse<BiobeatMeasurmentsResponse[]>): MedicalStatsDB[] {
         //@ts-ignore
-        let medicalStatsDB: MedicalStatsDB[] = biobeatWatchMeasurements.map(mes => ({
+        let medicalStatsDB: MedicalStatsDB[] = biobeatWatchMeasurements.data.map(mes => ({
             breathRate: mes.rr,
             protocolNumber: mes.protocol_num,
             systolicBloodPressure: mes.sbp,
@@ -54,7 +60,7 @@ export class ClockIntegratorScheduler {
             sweat: mes.sweat,
             calories: mes.calories,
             timestamp: mes.timestamp
-            }
+        }
         ));
         return medicalStatsDB;
     }
