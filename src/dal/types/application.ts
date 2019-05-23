@@ -9,5 +9,6 @@ const AppSchema: Schema = new Schema({
     appName: String
 });
 
+
 export const App = model<AppDB>("App", AppSchema);
 
