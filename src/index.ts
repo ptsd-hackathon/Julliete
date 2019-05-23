@@ -36,7 +36,7 @@ server.listen().then(({url}: { url: string }) => {
 
     let clockIntegrator = new ClockIntegratorScheduler();
     console.log("Starting scheduler task");
-    scheduleJob('*/5 * * * * *', function () {
+    scheduleJob('*/25 * * * *', function () {
         clockIntegrator.execute().then(() => {
             console.log("Updated active clocks information for all users");
         }).catch(err => {
