@@ -1,1 +1,0 @@
-{"version":3,"file":"location-data.js","sourceRoot":"","sources":["location-data.ts"],"names":[],"mappings":"","sourcesContent":["interface LocationData {\r\n    address:string\r\n    crowdedness: number\r\n    pointsOfInterest: Array<string>\r\n    weather: {description:string, temperature: string}\r\n}"]}
