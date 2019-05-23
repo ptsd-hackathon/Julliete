@@ -4,7 +4,8 @@ import moment from 'moment';
 export interface BiobeatTokenReponse {
     access_token: string;
     expires_in: number;
-    token_type: string;
+    token_type: string; 
+
 }
 
 export interface BiobeatMeasurmentsResponse {
