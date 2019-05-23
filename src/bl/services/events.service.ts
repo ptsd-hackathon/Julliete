@@ -6,7 +6,7 @@ import {GQLCoordinates, GQLWeather} from "../../../graphql-types";
 
 export class EventsService {
     public async addNewEvent(userEmail: string, appToken: string, logType: string,
-                             eventDescription: string, location?: { lat: number, long: number }, mediacalStats?: MedicalStatsDB[], locationData?: LocationData) {
+                             eventDescription: string, location?: { lat: number, long: number }, medicalStats?: MedicalStatsDB[], locationData?: LocationData) {
         await this.validateUserAndApp(userEmail, appToken);
         let eventsRepository = new EventsRepository();
         // @ts-ignore
@@ -26,7 +26,7 @@ export class EventsService {
                 weather: locationData == undefined ? null : locationData.weather
             },
             timestamp: new Date(),
-            medicalStats: mediacalStats == undefined ? null : mediacalStats
+            medicalStats: medicalStats == undefined ? null : medicalStats
         };
 
         try {
