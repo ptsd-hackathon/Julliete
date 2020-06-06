@@ -25,7 +25,7 @@
     "@types/graphql": "^14.0.7",
     "@types/mongoose": "^5.3.20",
     "@types/node-schedule": "^1.2.3",
-    "apollo-server": "^2.4.8",
+    "apollo-server": "^2.14.2",
     "axios": "^0.18.0",
     "busy-hours": "0.0.5",
     "graphql": "^14.1.1",
